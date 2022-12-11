@@ -10,7 +10,7 @@ import { HomeComponent } from './components/home/home.component';
 import { HeaderComponent } from './components/header/header.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { RecipeComponent } from './components/recipe/recipe.component';
-import { MyRecepiesComponent } from './components/my-recepies/my-recepies.component';
+import { MyRecipesComponent } from './components/my-recipes/my-recipes.component';
 import { AllRecipesComponent } from './components/all-recipes/all-recipes.component';
 import { RegisterComponent } from './components/register/register.component';
 import { FooterComponent } from './components/footer/footer.component';
@@ -23,7 +23,7 @@ import { FooterComponent } from './components/footer/footer.component';
     HeaderComponent,
     ProfileComponent,
     RecipeComponent,
-    MyRecepiesComponent,
+    MyRecipesComponent,
     AllRecipesComponent,
     RegisterComponent,
     FooterComponent
