@@ -1,0 +1,33 @@
+<div class="login-container">
+  <form #loginForm class="needs-validation" novalidate>
+    <div class="mb-3">
+      <label for="email" class="form-label">Email</label>
+      <input
+        type="text"
+        class="form-control"
+        id="email"
+        name="email"
+        required
+        [(ngModel)]="email"
+      />
+      <div class="invalid-feedback">Please enter an email</div>
+    </div>
+    <div class="mb-3">
+      <label for="password" class="form-label">Password</label>
+      <input
+        type="password"
+        class="form-control"
+        id="password"
+        name="password"
+        required
+        [(ngModel)]="password"
+      />
+      <div class="invalid-feedback">Please enter a password</div>
+    </div>
+    <div class="col-12">
+      <button class="btn btn-primary w-100" type="submit" (click)="login()">
+        Login
+      </button>
+    </div>
+  </form>
+</div>
