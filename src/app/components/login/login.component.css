@@ -1,6 +1,23 @@
 .login-container {
     width: 100%;
-    min-height: 95vh;
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+}
+
+.form-container {
     display: grid;
     place-items: center;
+    padding: 50px;
+}
+
+.login-img {
+    height: 100%;
+    background-image: url("/assets/images/login.jpg");
+    background-position: center center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    border-top-left-radius: var(--border-radius);
+    border-bottom-left-radius: var(--border-radius);
 }

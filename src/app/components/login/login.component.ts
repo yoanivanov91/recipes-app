@@ -18,7 +18,11 @@ export class LoginComponent implements OnInit {
   email: String = '';
   password: String = '';
 
-  constructor(private renderer: Renderer2, private authService: AuthService, private router: Router) {}
+  constructor(
+    private renderer: Renderer2,
+    private authService: AuthService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {}
 
@@ -27,13 +31,10 @@ export class LoginComponent implements OnInit {
       this.renderer.addClass(this.loginForm.nativeElement, 'was-validated');
       return;
     }
-    this.authService.login(this.email, this.password)
-                .subscribe(
-                    () => {
-                        console.log("User is logged in");
-                        this.router.navigateByUrl('/');
-                    }
-                );
+    this.authService.login(this.email, this.password).subscribe(() => {
+      console.log('User is logged in');
+      this.router.navigateByUrl('/');
+    });
     // this.renderer.setStyle(this.loginForm.nativeElement, 'background', '#d515a0');
   }
 }

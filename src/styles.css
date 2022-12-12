@@ -1,1 +1,86 @@
-/* You can add global styles to this file, and also import other style files */
+@import url("https://fonts.googleapis.com/css2?family=Nerko+One&family=Poppins:ital,wght@0,400;0,700;1,400;1,700&family=Yanone+Kaffeesatz&display=swap");
+
+:root {
+  --primary: #6c9e4f;
+  --primary-hover: hsl(98, 33%, 36%);
+  --border-radius: 12px;
+  --text-color: #212529;
+  --section-gap: 50px;
+  --footer-background-color: #dbcdb5;
+}
+
+*,
+*::before,
+*::after {
+  font-family: "Poppins", sans-serif;
+}
+
+body {
+    color: var(--text-color);
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #fff;
+  border-radius: var(--border-radius);
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: var(--primary);
+  border-radius: var(--border-radius);
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-hover);
+}
+
+.headline {
+  font-family: "Yanone Kaffeesatz", sans-serif;
+  margin-bottom: 16px;
+  font-size: 42px;
+  color: var(--primary);
+}
+
+.card {
+  border-radius: var(--border-radius);
+}
+
+.card-img,
+.card-img-top {
+  border-top-left-radius: var(--border-radius);
+  border-top-right-radius: var(--border-radius);
+}
+
+.form-control:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 0.25rem #6c9e4f25;
+}
+
+.my-primary-btn {
+    background-color: var(--primary);
+    color: #fff;
+}
+
+.my-primary-btn:hover,
+.my-primary-btn:focus {
+    background-color: var(--primary-hover);
+    color: #fff;
+}
+
+.simple-link {
+    color: var(--primary);
+    text-decoration: none;
+}
+
+.simple-link:hover,
+.simple-link:focus {
+    color: var(--primary-hover);
+}

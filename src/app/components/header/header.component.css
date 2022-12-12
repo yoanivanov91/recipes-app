@@ -1,0 +1,35 @@
+.navbar-brand {
+  font-family: "Nerko One", cursive;
+  color: var(--primary);
+  font-size: 30px;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-link {
+  color: var(--text-color);
+}
+
+.nav-link:hover,
+.nav-link:focus {
+  color: var(--primary);
+}
+
+.nav-link.active {
+  font-weight: bold;
+  color: var(--primary);
+}
+
+.navbar-toggler {
+  color: var(--text-color);
+}
+
+.dropdown-item:hover,
+.dropdown-item:focus {
+  background-color: var(--primary);
+  color: #fff;
+}
+.dropdown-item:active,
+.dropdown-item.active {
+  background-color: var(--primary);
+}

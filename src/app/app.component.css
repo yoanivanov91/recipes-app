@@ -1,0 +1,5 @@
+.main-container {
+    padding-top: var(--section-gap);
+    padding-bottom: var(--section-gap);
+    min-height: calc(100vh - 61px - 300px - 53px);
+}
