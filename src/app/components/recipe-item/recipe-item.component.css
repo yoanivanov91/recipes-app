@@ -1,0 +1,11 @@
+.card {
+    transition: transform 0.15s ease-in-out;
+}
+
+.card:hover {
+    transform: scale(0.97);
+}
+
+.z-index-up {
+    z-index: 100;
+}

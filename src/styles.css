@@ -1,8 +1,10 @@
-@import url("https://fonts.googleapis.com/css2?family=Nerko+One&family=Poppins:ital,wght@0,400;0,700;1,400;1,700&family=Yanone+Kaffeesatz&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Nerko+One&family=Poppins:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+@import url('https://fonts.cdnfonts.com/css/berlin-sans-fb-demi');
 
 :root {
   --primary: #6c9e4f;
   --primary-hover: hsl(98, 33%, 36%);
+  --primary25: rgba(108, 158, 79, 0.5);
   --border-radius: 12px;
   --text-color: #212529;
   --section-gap: 50px;
@@ -43,7 +45,7 @@ body {
 }
 
 .headline {
-  font-family: "Yanone Kaffeesatz", sans-serif;
+  font-family: 'Berlin Sans FB Demi', sans-serif;
   margin-bottom: 16px;
   font-size: 42px;
   color: var(--primary);
@@ -78,9 +80,42 @@ body {
 .simple-link {
     color: var(--primary);
     text-decoration: none;
+    transition: color 0.15s ease-in-out;
 }
 
 .simple-link:hover,
 .simple-link:focus {
     color: var(--primary-hover);
+}
+
+.hero {
+    margin-bottom: var(--section-gap);
+}
+
+.hero > img {
+    border-radius: var(--border-radius);
+}
+
+.dropdown-menu {
+    border-radius: var(--border-radius);
+}
+
+/* Icons */
+
+.icon-button-size {
+    font-size: 22px;
+}
+
+.icon-button-color {
+    color: var(--primary);
+}
+
+.icon-button-color:hover {
+    color: var(--primary-hover);
+}
+
+.badge-icon {
+    background-color: var(--primary);
+    color: #fff;
+    font-size: 16px;
 }

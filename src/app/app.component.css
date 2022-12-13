@@ -1,5 +1,13 @@
-.main-container {
-    padding-top: var(--section-gap);
-    padding-bottom: var(--section-gap);
-    min-height: calc(100vh - 61px - 300px - 53px);
+/* .main-container {
+    min-height: calc(100vh - 61px - 448.61px - 53px);
+} */
+
+.page-container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+app-footer {
+    margin-top: auto;
 }

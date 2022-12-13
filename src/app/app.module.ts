@@ -16,8 +16,10 @@ import { MyRecipesComponent } from './components/my-recipes/my-recipes.component
 import { AllRecipesComponent } from './components/all-recipes/all-recipes.component';
 import { RegisterComponent } from './components/register/register.component';
 import { FooterComponent } from './components/footer/footer.component';
-import { HeroComponent } from './components/hero/hero.component';
 import { AddRecipeComponent } from './components/add-recipe/add-recipe.component';
+import { NotFoundComponent } from './components/not-found/not-found.component';
+import { EditRecipeComponent } from './components/edit-recipe/edit-recipe.component';
+import { RecipeItemComponent } from './components/recipe-item/recipe-item.component';
 
 @NgModule({
   declarations: [
@@ -31,8 +33,10 @@ import { AddRecipeComponent } from './components/add-recipe/add-recipe.component
     AllRecipesComponent,
     RegisterComponent,
     FooterComponent,
-    HeroComponent,
-    AddRecipeComponent
+    AddRecipeComponent,
+    NotFoundComponent,
+    EditRecipeComponent,
+    RecipeItemComponent,
   ],
   imports: [
     BrowserModule,

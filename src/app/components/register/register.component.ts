@@ -39,6 +39,9 @@ export class RegisterComponent implements OnInit {
     }
     if(this.password !== this.rePassword) {
       this.toast.error('Passwords don\'t match', "Error");
+      this.password = '';
+      this.rePassword = '';
+      this.renderer.addClass(this.registerForm.nativeElement, 'was-validated');
       return;
     }
     this.authService.login(this.email, this.password).subscribe(() => {

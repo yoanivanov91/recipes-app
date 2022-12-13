@@ -1,0 +1,45 @@
+POST http://localhost:3000/register HTTP/1.1
+content-type: application/json
+
+{
+  "email": "yoan@abv.bg",
+  "password": "asdasd",
+  "firstname": "Yoan",
+  "lastname": "Ivanov",
+  "likedRecipes": []
+}
+
+###
+
+POST http://localhost:3000/login HTTP/1.1
+content-type: application/json
+
+{
+  "email": "yoan@abv.bg",
+  "password": "asdasd"
+}
+
+###
+
+GET http://localhost:3000/recipes HTTP/1.1
+Content-Type: application/json
+
+###
+
+POST http://localhost:3000/recipes HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InlvYW5AYWJ2LmJnIiwiaWF0IjoxNjcwODc1NTYwLCJleHAiOjE2NzA4NzkxNjAsInN1YiI6IjEifQ.740RMzVRJGUxH6nQG172shS_wQ9rC1JuxIVmyahEJsk
+
+{
+  "name": "Chicken with rice 2",
+  "image": "https://img.buzzfeed.com/thumbnailer-prod-us-east-1/video-api/assets/13385.jpg",
+  "ingredients": [
+    "chicken",
+    "rice",
+    "oil"
+  ],
+  "description": "Put the chicke and the rice together in the oven",
+  "level": "beginner",
+  "time": "30 minutes",
+  "likes": 0,
+}

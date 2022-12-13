@@ -9,10 +9,11 @@
     gap: 20px;
     max-width: 100%;
     overflow-y: auto;
-    padding-bottom: 8px;
+    padding-bottom: 26px;
+    border-radius: var(--border-radius);
 }
 
-.cards > .card {
+.card-container {
     width: 300px;
     flex-shrink: 0;
 }

@@ -1,235 +1,39 @@
+<div class="hero">
+  <img src="/assets/images/home.jpg" alt="Home" width="100%" height="100%" />
+</div>
 <div class="home-container">
   <div>
-    <h1 class="headline">Popular recipes</h1>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h1 class="headline m-0">Recently added recipes</h1>
+      <a class="simple-link fw-semibold" routerLink="/recipes">View all</a>
+    </div>
     <div class="cards">
-      <div class="card">
-        <img
-          src="https://loveincorporated.blob.core.windows.net/contentimages/gallery/d9e900e4-212e-4c3d-96d5-cb14a023c659-worlds-most-delicious-dishes.jpg"
-          class="card-img-top"
-          alt="Recipe image"
-        />
-        <div class="card-body">
-          <h5 class="card-title">Card title</h5>
-          <p class="card-text">
-            This is a longer card with supporting text below as a natural
-            lead-in to additional content. This content is a little bit longer.
-          </p>
-        </div>
-      </div>
-      <div class="card">
-        <img
-          src="https://loveincorporated.blob.core.windows.net/contentimages/gallery/d9e900e4-212e-4c3d-96d5-cb14a023c659-worlds-most-delicious-dishes.jpg"
-          class="card-img-top"
-          alt="Recipe image"
-        />
-        <div class="card-body">
-          <h5 class="card-title">Card title</h5>
-          <p class="card-text">
-            This is a longer card with supporting text below as a natural
-            lead-in to additional content. This content is a little bit longer.
-          </p>
-        </div>
-      </div>
-      <div class="card">
-        <img
-          src="https://loveincorporated.blob.core.windows.net/contentimages/gallery/d9e900e4-212e-4c3d-96d5-cb14a023c659-worlds-most-delicious-dishes.jpg"
-          class="card-img-top"
-          alt="Recipe image"
-        />
-        <div class="card-body">
-          <h5 class="card-title">Card title</h5>
-          <p class="card-text">
-            This is a longer card with supporting text below as a natural
-            lead-in to additional content.
-          </p>
-        </div>
-      </div>
-      <div class="card">
-        <img
-          src="https://loveincorporated.blob.core.windows.net/contentimages/gallery/d9e900e4-212e-4c3d-96d5-cb14a023c659-worlds-most-delicious-dishes.jpg"
-          class="card-img-top"
-          alt="Recipe image"
-        />
-        <div class="card-body">
-          <h5 class="card-title">Card title</h5>
-          <p class="card-text">
-            This is a longer card with supporting text below as a natural
-            lead-in to additional content. This content is a little bit longer.
-          </p>
-        </div>
-      </div>
-      <div class="card">
-        <img
-          src="https://loveincorporated.blob.core.windows.net/contentimages/gallery/d9e900e4-212e-4c3d-96d5-cb14a023c659-worlds-most-delicious-dishes.jpg"
-          class="card-img-top"
-          alt="Recipe image"
-        />
-        <div class="card-body">
-          <h5 class="card-title">Card title</h5>
-          <p class="card-text">
-            This is a longer card with supporting text below as a natural
-            lead-in to additional content. This content is a little bit longer.
-          </p>
-        </div>
-      </div>
-      <div class="card">
-        <img
-          src="https://loveincorporated.blob.core.windows.net/contentimages/gallery/d9e900e4-212e-4c3d-96d5-cb14a023c659-worlds-most-delicious-dishes.jpg"
-          class="card-img-top"
-          alt="Recipe image"
-        />
-        <div class="card-body">
-          <h5 class="card-title">Card title</h5>
-          <p class="card-text">
-            This is a longer card with supporting text below as a natural
-            lead-in to additional content. This content is a little bit longer.
-          </p>
-        </div>
-      </div>
-      <div class="card">
-        <img
-          src="https://loveincorporated.blob.core.windows.net/contentimages/gallery/d9e900e4-212e-4c3d-96d5-cb14a023c659-worlds-most-delicious-dishes.jpg"
-          class="card-img-top"
-          alt="Recipe image"
-        />
-        <div class="card-body">
-          <h5 class="card-title">Card title</h5>
-          <p class="card-text">
-            This is a longer card with supporting text below as a natural
-            lead-in to additional content. This content is a little bit longer.
-          </p>
-        </div>
-      </div>
-      <div class="card">
-        <img
-          src="https://loveincorporated.blob.core.windows.net/contentimages/gallery/d9e900e4-212e-4c3d-96d5-cb14a023c659-worlds-most-delicious-dishes.jpg"
-          class="card-img-top"
-          alt="Recipe image"
-        />
-        <div class="card-body">
-          <h5 class="card-title">Card title</h5>
-          <p class="card-text">
-            This is a longer card with supporting text below as a natural
-            lead-in to additional content. This content is a little bit longer.
-          </p>
-        </div>
+      <div class="card-container" *ngFor="let recipe of recipes">
+        <app-recipe-item></app-recipe-item>
       </div>
     </div>
   </div>
   <div>
-    <h1 class="headline">Recently added recipes</h1>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h1 class="headline m-0">Popular recipes</h1>
+      <a class="simple-link fw-semibold" routerLink="/recipes">View all</a>
+    </div>
     <div class="cards">
-      <div class="card">
-        <img
-          src="https://loveincorporated.blob.core.windows.net/contentimages/gallery/d9e900e4-212e-4c3d-96d5-cb14a023c659-worlds-most-delicious-dishes.jpg"
-          class="card-img-top"
-          alt="Recipe image"
-        />
-        <div class="card-body">
-          <h5 class="card-title">Card title</h5>
-          <p class="card-text">
-            This is a longer card with supporting text below as a natural
-            lead-in to additional content. This content is a little bit longer.
-          </p>
-        </div>
+      <div class="card-container" *ngFor="let recipe of recipes">
+        <app-recipe-item></app-recipe-item>
       </div>
-      <div class="card">
-        <img
-          src="https://loveincorporated.blob.core.windows.net/contentimages/gallery/d9e900e4-212e-4c3d-96d5-cb14a023c659-worlds-most-delicious-dishes.jpg"
-          class="card-img-top"
-          alt="Recipe image"
-        />
-        <div class="card-body">
-          <h5 class="card-title">Card title</h5>
-          <p class="card-text">
-            This is a longer card with supporting text below as a natural
-            lead-in to additional content. This content is a little bit longer.
-          </p>
-        </div>
-      </div>
-      <div class="card">
-        <img
-          src="https://loveincorporated.blob.core.windows.net/contentimages/gallery/d9e900e4-212e-4c3d-96d5-cb14a023c659-worlds-most-delicious-dishes.jpg"
-          class="card-img-top"
-          alt="Recipe image"
-        />
-        <div class="card-body">
-          <h5 class="card-title">Card title</h5>
-          <p class="card-text">
-            This is a longer card with supporting text below as a natural
-            lead-in to additional content.
-          </p>
-        </div>
-      </div>
-      <div class="card">
-        <img
-          src="https://loveincorporated.blob.core.windows.net/contentimages/gallery/d9e900e4-212e-4c3d-96d5-cb14a023c659-worlds-most-delicious-dishes.jpg"
-          class="card-img-top"
-          alt="Recipe image"
-        />
-        <div class="card-body">
-          <h5 class="card-title">Card title</h5>
-          <p class="card-text">
-            This is a longer card with supporting text below as a natural
-            lead-in to additional content. This content is a little bit longer.
-          </p>
-        </div>
-      </div>
-      <div class="card">
-        <img
-          src="https://loveincorporated.blob.core.windows.net/contentimages/gallery/d9e900e4-212e-4c3d-96d5-cb14a023c659-worlds-most-delicious-dishes.jpg"
-          class="card-img-top"
-          alt="Recipe image"
-        />
-        <div class="card-body">
-          <h5 class="card-title">Card title</h5>
-          <p class="card-text">
-            This is a longer card with supporting text below as a natural
-            lead-in to additional content. This content is a little bit longer.
-          </p>
-        </div>
-      </div>
-      <div class="card">
-        <img
-          src="https://loveincorporated.blob.core.windows.net/contentimages/gallery/d9e900e4-212e-4c3d-96d5-cb14a023c659-worlds-most-delicious-dishes.jpg"
-          class="card-img-top"
-          alt="Recipe image"
-        />
-        <div class="card-body">
-          <h5 class="card-title">Card title</h5>
-          <p class="card-text">
-            This is a longer card with supporting text below as a natural
-            lead-in to additional content. This content is a little bit longer.
-          </p>
-        </div>
-      </div>
-      <div class="card">
-        <img
-          src="https://loveincorporated.blob.core.windows.net/contentimages/gallery/d9e900e4-212e-4c3d-96d5-cb14a023c659-worlds-most-delicious-dishes.jpg"
-          class="card-img-top"
-          alt="Recipe image"
-        />
-        <div class="card-body">
-          <h5 class="card-title">Card title</h5>
-          <p class="card-text">
-            This is a longer card with supporting text below as a natural
-            lead-in to additional content. This content is a little bit longer.
-          </p>
-        </div>
-      </div>
-      <div class="card">
-        <img
-          src="https://loveincorporated.blob.core.windows.net/contentimages/gallery/d9e900e4-212e-4c3d-96d5-cb14a023c659-worlds-most-delicious-dishes.jpg"
-          class="card-img-top"
-          alt="Recipe image"
-        />
-        <div class="card-body">
-          <h5 class="card-title">Card title</h5>
-          <p class="card-text">
-            This is a longer card with supporting text below as a natural
-            lead-in to additional content. This content is a little bit longer.
-          </p>
-        </div>
+    </div>
+  </div>
+  <div>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h1 class="headline m-0">My favorite recipes</h1>
+      <a class="simple-link fw-semibold" routerLink="/favorite-recipes"
+        >View all</a
+      >
+    </div>
+    <div class="cards">
+      <div class="card-container" *ngFor="let recipe of recipes">
+        <app-recipe-item></app-recipe-item>
       </div>
     </div>
   </div>
