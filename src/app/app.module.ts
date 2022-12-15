@@ -5,6 +5,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
+import { provideQueryClientOptions } from '@ngneat/query';
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './components/login/login.component';
@@ -46,7 +47,15 @@ import { RecipeItemComponent } from './components/recipe-item/recipe-item.compon
     BrowserAnimationsModule,
     ToastrModule.forRoot()
   ],
-  providers: [],
+  providers: [
+    provideQueryClientOptions({
+      defaultOptions: {
+        queries: {
+          refetchOnWindowFocus: false
+        },
+      },
+    }),
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

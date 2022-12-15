@@ -4,6 +4,7 @@ import {
   ViewChild,
   ElementRef,
   Renderer2,
+  inject,
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
@@ -15,20 +16,17 @@ import { ToastrService } from 'ngx-toastr';
   styleUrls: ['./register.component.css']
 })
 export class RegisterComponent implements OnInit {
-
+  private renderer = inject(Renderer2);
+  private authService = inject(AuthService);
+  private router = inject(Router);
+  private toast = inject(ToastrService);
+  
   @ViewChild('registerForm') registerForm: ElementRef<HTMLFormElement>;
   email: String = '';
   password: String = '';
   rePassword: String = '';
   firstName: String = '';
   lastName: String = '';
-
-  constructor(
-    private renderer: Renderer2,
-    private authService: AuthService,
-    private router: Router,
-    private toast: ToastrService
-  ) {}
 
   ngOnInit(): void {}
 

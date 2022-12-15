@@ -6,7 +6,7 @@ const { generateToken } = require("../util/token");
 const registerUser = asyncHandler(async (req, res) => {
   const { firstName, lastName, email, password } = req.body;
 
-  if (!firstName || !lastName || !email || !password) {
+  if (email == '' || password == '' || firstName == '' || lastName == '') {
     res.status(400);
     throw new Error("All fields are required");
   }
@@ -22,18 +22,21 @@ const registerUser = asyncHandler(async (req, res) => {
   const hashedPassword = await bcrypt.hash(password, salt);
 
   const user = await User.create({
-    firstName,
-    lastName,
     email,
     password: hashedPassword,
+    firstName,
+    lastName,
   });
 
   if (user) {
     res.status(201).json({
+      user: {
       _id: user._id,
+      email: user.email,
       firstName: user.firstName,
       lastName: user.lastName,
-      email: user.email,
+      likedRecipes: [...user.likedRecipes]
+      },
       token: generateToken(user._id),
     });
   } else {
@@ -48,9 +51,15 @@ const loginUser = asyncHandler(async (req, res) => {
   const user = await User.findOne({ email }).collation({locale: "en", strength: 2}).select('+password');
 
   if (user && (await bcrypt.compare(password, user.password))) {
-    const {password, ...userData} = user._doc;
+
     res.json({
-        user: {...userData},
+        user: {
+        _id: user._id,
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        likedRecipes: [...user.likedRecipes]
+        },
         token: generateToken(user._id),
     });
   } else {

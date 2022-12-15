@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Nerko+One&family=Poppins:ital,wght@0,400;0,700;1,400;1,700&display=swap');
 @import url('https://fonts.cdnfonts.com/css/berlin-sans-fb-demi');
+@import 'animate.css';
 
 :root {
   --primary: #6c9e4f;
@@ -15,10 +16,12 @@
 *::before,
 *::after {
   font-family: "Poppins", sans-serif;
+  scroll-behavior: auto !important;
 }
 
 body {
     color: var(--text-color);
+    overflow-x: hidden;
 }
 
 /* width */
@@ -80,7 +83,9 @@ body {
 .simple-link {
     color: var(--primary);
     text-decoration: none;
+    cursor: pointer;
     transition: color 0.15s ease-in-out;
+    width: max-content;
 }
 
 .simple-link:hover,
@@ -118,4 +123,10 @@ body {
     background-color: var(--primary);
     color: #fff;
     font-size: 16px;
+}
+
+.card-img-top {
+    height: 250px;
+    object-fit: cover;
+    object-position: center;
 }

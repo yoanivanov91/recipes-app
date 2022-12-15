@@ -4,6 +4,7 @@ import {
   ViewChild,
   ElementRef,
   Renderer2,
+  inject,
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
@@ -14,15 +15,13 @@ import { AuthService } from 'src/app/services/auth.service';
   styleUrls: ['./login.component.css'],
 })
 export class LoginComponent implements OnInit {
+  private renderer = inject(Renderer2);
+  private authService = inject(AuthService);
+  private router = inject(Router);
+
   @ViewChild('loginForm') loginForm: ElementRef<HTMLFormElement>;
   email: String = '';
   password: String = '';
-
-  constructor(
-    private renderer: Renderer2,
-    private authService: AuthService,
-    private router: Router
-  ) {}
 
   ngOnInit(): void {}
 

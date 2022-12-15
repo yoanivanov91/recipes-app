@@ -1,27 +1,27 @@
 <div class="card shadow-sm">
   <img
-    src="https://loveincorporated.blob.core.windows.net/contentimages/gallery/d9e900e4-212e-4c3d-96d5-cb14a023c659-worlds-most-delicious-dishes.jpg"
+    src="{{recipe.image}}"
     class="card-img-top"
-    alt="Chicken with rice"
+    alt="{{recipe.title}}"
   />
   <div class="card-body">
     <div class="d-flex justify-content-between align-items-center mb-3">
-      <span class="badge badge-icon">Breakfast</span>
+      <span class="badge badge-icon">{{recipe.category}}</span>
       <a href="#" title="Like" class="z-index-up"
         ><i class="bi bi-heart-fill icon-button-size icon-button-color"></i
       ></a>
     </div>
-    <h5 class="card-title mb-3">Chicken with rice</h5>
+    <h5 class="card-title mb-3">{{recipe.title}}</h5>
     <div class="d-flex justify-content-between align-items-center">
       <div class="d-flex align-items-center">
         <i class="bi bi-clock icon-button-size me-2"></i>
-        <span>30 mins</span>
+        <span>{{recipe.time ? recipe.time : 'N/A'}} mins</span>
       </div>
       <div class="d-flex align-items-center">
         <i class="bi bi-hand-thumbs-up icon-button-size me-2"></i>
-        <span>30 likes</span>
+        <span>{{recipe.likes}} {{recipe.likes == 1 ? ' like' : ' likes' }}</span>
       </div>
     </div>
-    <a routerLink="/recipes/details/1" class="stretched-link"></a>
+    <a routerLink="/recipes/details/{{recipe.slug}}" class="stretched-link"></a>
   </div>
 </div>

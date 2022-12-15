@@ -5,5 +5,5 @@ export interface User {
     email: String,
     firstName: String,
     lastName: String,
-    likedRecipes: Recipe[]
+    likedRecipes: String[] | Recipe[]
 }

@@ -15,8 +15,8 @@ const routes: Routes = [
   { path: '', title: "Recipes - All the best recipes in one place", component: HomeComponent },
   { path: 'recipes', title: "Recipes - All recipes", component: AllRecipesComponent },
   { path: 'recipes/add', title: "Recipes - Add a new recipe", component: AddRecipeComponent },
-  { path: 'recipes/details/:id', title: "Recipes - details", component: RecipeComponent },
-  { path: 'recipes/edit/:id', title: "Recipes - edit", component: EditRecipeComponent },
+  { path: 'recipes/details/:slug', title: "Recipes - details", component: RecipeComponent },
+  { path: 'recipes/edit/:slug', title: "Recipes - edit", component: EditRecipeComponent },
   { path: 'profile', title: "Recipes - My profile", component: ProfileComponent },
   { path: 'my-recipes', title: "Recipes - My recipes", component: MyRecipesComponent },
   { path: 'auth/login', title: "Recipes - Login", component: LoginComponent },
@@ -25,7 +25,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes, {scrollPositionRestoration: 'enabled'})],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

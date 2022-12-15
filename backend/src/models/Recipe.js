@@ -1,11 +1,17 @@
 const mongoose = require('mongoose');
-// const Double = require('@mongoosejs/double');
+const slug = require('mongoose-slug-generator');
+mongoose.plugin(slug);
 
 const recipeSchema = mongoose.Schema({
-    name: {
+    title: {
         type: String,
         trim: true,
         required: true
+    },
+    slug: { 
+        type: String, 
+        slug: "title",
+        unique: true 
     },
     category: {
         type: String,
@@ -43,7 +49,7 @@ const recipeSchema = mongoose.Schema({
     }
 },
 {
-    timestaps: true
+    timestamps: true
 });
 
 const Recipe = mongoose.model('Recipe', recipeSchema);
