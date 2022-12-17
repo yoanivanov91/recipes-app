@@ -1,13 +1,12 @@
 import {
   Component,
   OnInit,
-  ViewChild,
-  ElementRef,
-  Renderer2,
   inject,
 } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { AuthService } from 'src/app/services/auth.service';
+import { FormGroup,  FormBuilder,  Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-login',
@@ -15,25 +14,44 @@ import { AuthService } from 'src/app/services/auth.service';
   styleUrls: ['./login.component.css'],
 })
 export class LoginComponent implements OnInit {
-  private renderer = inject(Renderer2);
   private authService = inject(AuthService);
   private router = inject(Router);
+  private toast = inject(ToastrService);
+  private route = inject(ActivatedRoute);
+  private fb = inject(FormBuilder);
 
-  @ViewChild('loginForm') loginForm: ElementRef<HTMLFormElement>;
-  email: String = '';
-  password: String = '';
+  submitted: boolean = false;
+  loginForm: FormGroup = this.fb.group({
+    email: ['', Validators.compose([Validators.required, Validators.email])],
+    password: ['', Validators.compose([Validators.required, Validators.minLength(3)])]
+  });
+  returnUrl: string | null;
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.returnUrl = this.route.snapshot.queryParamMap.get('returnUrl');
+  }
 
-  login() {
-    if (!this.loginForm.nativeElement.checkValidity()) {
-      this.renderer.addClass(this.loginForm.nativeElement, 'was-validated');
-      return;
+  get form() {
+    return this.loginForm.controls;
+  }
+
+  onSubmit() {
+    this.submitted = true;
+    if (!this.loginForm.valid) {
+      this.toast.error('Please fill up the necessary fields', 'Error');
+      return false;
+    } else {
+      this.authService.login(this.form.email.value, this.form.password.value).subscribe({
+        next: (user) => {
+          this.returnUrl ? this.router.navigate([this.returnUrl]) : this.router.navigate(['/']);
+          this.toast.success(`Welcome, ${user?.firstName}`, `Logged in`);
+        },
+        error: (error) => { 
+          this.form.password.setValue('');
+          this.toast.error(error.error.message, 'Error');
+        }
+      });
+      return true;
     }
-    this.authService.login(this.email, this.password).subscribe(() => {
-      console.log('User is logged in');
-      this.router.navigateByUrl('/');
-    });
-    // this.renderer.setStyle(this.loginForm.nativeElement, 'background', '#d515a0');
   }
 }

@@ -1,45 +1,77 @@
 const asyncHandler = require('express-async-handler');
 const Recipe = require('../models/Recipe');
+const Like = require('../models/Like');
 
 const getAllRecipes = asyncHandler(async (req, res) => {
     const recipes = await Recipe.find({}).sort({createdAt: -1});
     res.status(200).json(recipes);
 });
 
-const getLastTenRecipes = asyncHandler(async (req, res) => {
-    const recipes = await Recipe.find({}).sort({createdAt: -1}).limit(10);
+const getRecentAndFavoriteAndLiked = asyncHandler(async (req, res) => {
+    let recent = await Recipe.find({}).sort({createdAt: -1}).limit(10).lean();
+    let popular = await Recipe.find({}).sort({likes: -1, createdAt: -1}).limit(10).lean();
+    let liked = [];
+    if(req.user) {
+        liked = await Like.find({userId: { $ne: req.user._id}}).sort({createdAt: -1}).limit(10).populate('recipeId').lean();
+    }
+    res.status(200).json({
+        recent, 
+        popular, 
+        liked
+    })
+});
+
+const getMyRecipes = asyncHandler(async (req, res) => {
+    const recipes = await Recipe.find({owner: req.user._id}).sort({createdAt: -1});
     res.status(200).json(recipes);
 });
 
-const getTenMostPopularRecipes = asyncHandler(async (req, res) => {
-    const recipes = await Recipe.find({}).sort({likes: -1, createdAt: -1}).limit(10);
-    res.status(200).json(recipes);
-});
+// const getLastTenRecipes = asyncHandler(async (req, res) => {
+//     const recipes = await Recipe.find({}).sort({createdAt: -1}).limit(10);
+//     res.status(200).json(recipes);
+// });
 
-const getMyLikedRecipes = asyncHandler(async (req, res) => {
-    const recipes = [...req.user.likedRecipes].reverse();
-    res.status(200).json(recipes);
-});
+// const getTenMostPopularRecipes = asyncHandler(async (req, res) => {
+//     const recipes = await Recipe.find({}).sort({likes: -1, createdAt: -1}).limit(10);
+//     res.status(200).json(recipes);
+// });
 
-const getTenMoreFromCategory = asyncHandler(async (req, res) => {
-    const recipes = await Recipe.find({category: req.params.category}).sort({likes: -1, createdAt: -1}).limit(10);
-    res.status(200).json(recipes);
-});
+// const getMyLikedRecipes = asyncHandler(async (req, res) => {
+//     const recipes = await Like.find({userId: req.user._id}).sort({createdAt: -1}).limit(10).populate('recipeId');
+//     res.status(200).json(recipes);
+// });
 
-const getTenMoreFromUser = asyncHandler(async (req, res) => {
-    const recipes = await Recipe.find({owner: req.params.userId}).sort({likes: -1, createdAt: -1}).limit(10);
-    res.status(200).json(recipes);
-});
+// const getTenMoreFromCategory = asyncHandler(async (req, res) => {
+//     const recipes = await Recipe.find({category: req.params.category, _id: { $ne: req.params.recipeId }}).sort({likes: -1, createdAt: -1}).limit(10);
+//     res.status(200).json(recipes);
+// });
+
+// const getTenMoreFromUser = asyncHandler(async (req, res) => {
+//     const recipes = await Recipe.find({owner: req.params.userId, _id: { $ne: req.params.recipeId }}).sort({likes: -1, createdAt: -1}).limit(10);
+//     res.status(200).json(recipes);
+// });
 
 const getRecipe = asyncHandler(async (req, res) => {
-    const recipe = await Recipe.findOne({slug: req.params.slug}).populate('owner');
+    let recipe = await Recipe.findOne({slug: req.params.slug}).populate('owner').lean();
 
     if(!recipe) {
         res.status(400);
         throw new Error('Recipe not found');
     }
 
-    res.status(200).json(recipe);
+    const tenMoreFromCategory = await Recipe.find({category: recipe.category, _id: { $ne: recipe._id }}).sort({likes: -1, createdAt: -1}).limit(10);
+    const tenMoreFromUser = await Recipe.find({owner: recipe.owner._id, _id: { $ne: recipe._id }}).sort({likes: -1, createdAt: -1}).limit(10);
+
+    if(req.user) {
+        const liked = await Like.find({userId: req.user._id});
+        recipe = {...recipe, alreadyLiked: liked.some(likedRecipe => likedRecipe.recipeId.toString() == recipe._id)};
+    }
+
+    res.status(200).json({
+        recipe,
+        tenMoreFromCategory,
+        tenMoreFromUser
+    });
 });
 
 const createRecipe = asyncHandler(async (req, res) => {
@@ -69,19 +101,19 @@ const updateRecipe = asyncHandler(async (req, res) => {
         throw new Error(`Please fill out the required fields`);
     }
 
-    const recipe = await Recipe.findOne({slug: req.params.slug});
+    const recipe = await Recipe.findOne({_id: req.params.recipeId});
 
     if(!recipe) {
         res.status(400);
         throw new Error('Recipe not found');
     }
     
-    if (recipe.owner.toString() !== req.user._id) {
+    if (recipe.owner.toString() != req.user._id) {
         res.status(401)
         throw new Error('User not authorized')
     }
 
-    const updatedRecipe = await Recipe.findOneAndUpdate({slug: req.params.slug}, req.body, {
+    const updatedRecipe = await Recipe.findOneAndUpdate({_id: req.params.recipeId}, req.body, {
         new: true
     });
 
@@ -89,31 +121,70 @@ const updateRecipe = asyncHandler(async (req, res) => {
 });
 
 const deleteRecipe = asyncHandler(async (req, res) => {
-    const recipe = await Recipe.findOne({slug: req.params.slug});
+    const recipe = await Recipe.findOne({_id: req.params.recipeId});
 
     if(!recipe) {
         res.status(400);
         throw new Error('Recipe not found');
     }
 
-    if (recipe.owner.toString() !== req.user._id) {
+    if (recipe.owner.toString() != req.user._id) {
         res.status(401)
         throw new Error('User not authorized')
     }
 
-    const deletedRecipe = await Recipe.findOneAndDelete({slug: req.params.slug});
+    const deletedRecipe = await Recipe.findOneAndDelete({_id: req.params.recipeId});
+    res.status(200).json(deletedRecipe);
+});
+
+const likeRecipe = asyncHandler(async (req, res) => {
+    const alreadyLiked = await Like.findOne({userId: req.user._id, recipeId: req.params.recipeId});
+    if(alreadyLiked) {
+        res.status(401)
+        throw new Error('You\'ve already liked this recipe')
+    }
+
+    const like = await Like.create({
+        userId: req.user._id,
+        recipeId: req.params.recipeId
+    });
+
+    const recipe = await Recipe.findOne({_id: req.params.recipeId});
+    recipe.likes += 1;
+    await recipe.save();
+
+    res.status(200).json(like);
+});
+
+const dislikeRecipe = asyncHandler(async (req, res) => {
+    const like = await Like.findOne({userId: req.user._id, recipeId: req.params.recipeId});
+    if(!like) {
+        res.status(400);
+        throw new Error('This recipe hasn\'t been liked yet');
+    }
+
+    const deletedRecipe = await Like.findOneAndDelete({_id: like._id});
+
+    const recipe = await Recipe.findOne({_id: req.params.recipeId});
+    recipe.likes = recipe.likes == 0 ? 0 : recipe.likes - 1;
+    await recipe.save();
+    
     res.status(200).json(deletedRecipe);
 });
 
 module.exports = {
     getAllRecipes,
-    getLastTenRecipes,
-    getTenMostPopularRecipes,
-    getMyLikedRecipes,
-    getTenMoreFromCategory,
-    getTenMoreFromUser,
+    getMyRecipes,
+    getRecentAndFavoriteAndLiked,
+    // getLastTenRecipes,
+    // getTenMostPopularRecipes,
+    // getMyLikedRecipes,
+    // getTenMoreFromCategory,
+    // getTenMoreFromUser,
     getRecipe,
     createRecipe,
     updateRecipe,
-    deleteRecipe
+    deleteRecipe,
+    likeRecipe,
+    dislikeRecipe
 }

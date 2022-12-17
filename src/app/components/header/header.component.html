@@ -23,26 +23,36 @@
           <li class="nav-item">
             <a class="nav-link" routerLink="/recipes" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Recipes</a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" routerLink="/recipes/add" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Add recipe</a>
-          </li>
-          <li class="nav-item dropdown">
-            <a
-              class="nav-link dropdown-toggle"
-              href="#"
-              role="button"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-            >
-              Yoan
-            </a>
-            <ul class="dropdown-menu dropdown-menu-end">
-              <li><a class="dropdown-item" routerLink="/profile" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Profile</a></li>
-              <li><a class="dropdown-item" routerLink="/my-recipes" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">My recipes</a></li>
-              <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item" href="#">Logout</a></li>
-            </ul>
-          </li>
+          <ng-container *ngIf="!user">
+            <li class="nav-item">
+                <a class="nav-link" routerLink="/auth/login" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Login</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" routerLink="/auth/register" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Register</a>
+            </li>
+          </ng-container>
+          <ng-container *ngIf="user">
+              <li class="nav-item">
+                <a class="nav-link" routerLink="/recipes/add" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Add recipe</a>
+              </li>
+              <li class="nav-item dropdown">
+                <button
+                  class="nav-link dropdown-toggle button-style-reset"
+                  role="button"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
+                  {{user.firstName}}
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end">
+                  <li><a class="dropdown-item" routerLink="/profile" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Profile</a></li>
+                  <li><a class="dropdown-item" routerLink="/my-recipes" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">My recipes</a></li>
+                  <li><hr class="dropdown-divider"></li>
+                  <li><button class="dropdown-item" role="button" (click)="logout(user.firstName)">Logout</button></li>
+                </ul>
+              </li>
+          </ng-container>
+          
         </ul>
       </div>
     </div>

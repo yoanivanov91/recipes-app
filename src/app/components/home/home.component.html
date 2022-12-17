@@ -8,81 +8,80 @@
       <a class="simple-link fw-semibold" routerLink="/recipes">View all</a>
     </div>
 
-    <div
-      class="d-flex justify-content-center"
-      *ngIf="recentlyAddedRecipes.isLoading || recentlyAddedRecipes.isError"
-    >
-      <div
-        class="spinner-border"
-        role="status"
-        *ngIf="recentlyAddedRecipes.isLoading"
-      >
+    <div class="d-flex justify-content-center" *ngIf="recipes.isLoading">
+      <div class="spinner-border" role="status">
         <span class="visually-hidden">Loading...</span>
       </div>
-      <p class="m-0" *ngIf="recentlyAddedRecipes.isError">Oops! Something went wrong while getting the recipes for you. Please refresh the page.</p>
     </div>
+    <p class="m-0" *ngIf="recipes.isError">
+      Oops! Something went wrong while getting the recipes for you. Please
+      refresh the page.
+    </p>
 
-    <div class="cards" *ngIf="recentlyAddedRecipes.isSuccess">
-      <div
-        class="card-container"
-        *ngFor="let recipe of recentlyAddedRecipes.data"
-      >
-        <app-recipe-item [recipe]="recipe"></app-recipe-item>
-      </div>
+    <div class="cards" *ngIf="recipes.isSuccess">
+      <ng-container *ngIf="recipes.data.recent.length > 0">
+        <div class="card-container" *ngFor="let recipe of recipes.data.recent">
+          <app-recipe-item [recipe]="recipe"></app-recipe-item>
+        </div>
+      </ng-container>
+      <p class="m-0" *ngIf="recipes.data.recent.length == 0">
+        There aren't any recipes yet.
+      </p>
     </div>
   </div>
   <div>
     <div class="d-flex justify-content-between align-items-center mb-3">
       <h1 class="headline m-0">Popular recipes</h1>
-      <a class="simple-link fw-semibold" routerLink="/recipes" [queryParams]="{show: 'popular'}">View all</a>
+      <a class="simple-link fw-semibold" routerLink="/recipes">View all</a>
     </div>
 
-    <div
-      class="d-flex justify-content-center"
-      *ngIf="popularRecipes.isLoading || popularRecipes.isError"
-    >
-      <div
-        class="spinner-border"
-        role="status"
-        *ngIf="popularRecipes.isLoading"
-      >
+    <div class="d-flex justify-content-center" *ngIf="recipes.isLoading">
+      <div class="spinner-border" role="status">
         <span class="visually-hidden">Loading...</span>
       </div>
-      <p class="m-0" *ngIf="popularRecipes.isError">Oops! Something went wrong while getting the recipes for you. Please refresh the page.</p>
     </div>
+    <p class="m-0" *ngIf="recipes.isError">
+      Oops! Something went wrong while getting the recipes for you. Please
+      refresh the page.
+    </p>
 
-    <div class="cards" *ngIf="popularRecipes.isSuccess">
-      <div class="card-container" *ngFor="let recipe of popularRecipes.data">
-        <app-recipe-item [recipe]="recipe"></app-recipe-item>
-      </div>
+    <div class="cards" *ngIf="recipes.isSuccess">
+      <ng-container *ngIf="recipes.data.popular.length > 0">
+        <div class="card-container" *ngFor="let recipe of recipes.data.popular">
+          <app-recipe-item [recipe]="recipe"></app-recipe-item>
+        </div>
+      </ng-container>
+      <p class="m-0" *ngIf="recipes.data.popular.length == 0">
+        There aren't any recipes yet.
+      </p>
     </div>
   </div>
-  <div *ngIf="!!user">
+
+  <div *ngIf="user && recipes?.data?.liked?.length > 0">
     <div class="d-flex justify-content-between align-items-center mb-3">
-      <h1 class="headline m-0">My favorite recipes</h1>
-      <a class="simple-link fw-semibold" routerLink="/favorite-recipes"
-        >View all</a
-      >
+      <h1 class="headline m-0">Recently liked recipes</h1>
+      <a class="simple-link fw-semibold" routerLink="/recipes">View all</a>
     </div>
 
-    <div
-      class="d-flex justify-content-center"
-      *ngIf="myLikedRecipes.isLoading || myLikedRecipes.isError"
-    >
-      <div
-        class="spinner-border"
-        role="status"
-        *ngIf="myLikedRecipes.isLoading"
-      >
+    <div class="d-flex justify-content-center" *ngIf="recipes.isLoading">
+      <div class="spinner-border" role="status">
         <span class="visually-hidden">Loading...</span>
       </div>
-      <p class="m-0" *ngIf="myLikedRecipes.isError">Oops! Something went wrong while getting the recipes for you. Please refresh the page.</p>
     </div>
+    <p class="m-0" *ngIf="recipes.isError">
+      Oops! Something went wrong while getting the recipes for you. Please
+      refresh the page.
+    </p>
 
-    <div class="cards" *ngIf="myLikedRecipes.isSuccess">
-      <div class="card-container" *ngFor="let recipe of myLikedRecipes.data">
-        <app-recipe-item [recipe]="recipe"></app-recipe-item>
-      </div>
+    <div class="cards" *ngIf="recipes.isSuccess">
+      <ng-container *ngIf="recipes.data.liked.length > 0">
+        <div class="card-container" *ngFor="let recipe of recipes.data.liked">
+          <app-recipe-item [recipe]="recipe.recipeId"></app-recipe-item>
+        </div>
+      </ng-container>
+      <p class="m-0" *ngIf="recipes.data.liked.length == 0">
+        You don't have any liked recipes yet.
+      </p>
     </div>
   </div>
 </div>

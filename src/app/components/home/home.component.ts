@@ -1,32 +1,31 @@
 import { Component, inject, OnInit } from '@angular/core';
+import { AuthService } from 'src/app/services/auth.service';
 import { RecipeService } from 'src/app/services/recipe.service';
+import { User } from 'src/app/models/user.model';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css']
+  styleUrls: ['./home.component.css'],
 })
 export class HomeComponent implements OnInit {
   private recipeService = inject(RecipeService);
+  private authService = inject(AuthService);
 
-  recentlyAddedRecipes$ = this.recipeService.getLastTenRecipes().result$;
-  popularRecipes$ = this.recipeService.getTenMostPopularRecipes().result$;
-  myLikedRecipes$ = this.recipeService.getMyLikedRecipes().result$;
+  recipes: any;
   recentlyAddedRecipes: any;
   popularRecipes: any;
   myLikedRecipes: any;
-  user: any = null;
+  user: User | null;
 
   ngOnInit(): void {
-    this.recentlyAddedRecipes$.subscribe(data => {
-      this.recentlyAddedRecipes = {...data}
-    });
-    this.popularRecipes$.subscribe(data => {
-      this.popularRecipes = {...data}
-    });
-    this.myLikedRecipes$.subscribe(data => {
-      this.myLikedRecipes = {...data}
+    this.authService.getUser().subscribe((user) => {
+      this.user = user;
+      this.recipeService
+        .getRecentAndPopularAndLiked()
+        .result$.subscribe((data) => {
+          this.recipes = { ...data };
+        });
     });
   }
-
 }

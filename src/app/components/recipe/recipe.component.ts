@@ -2,40 +2,42 @@ import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { BackNavigationService } from 'src/app/services/back-navigation.service';
 import { RecipeService } from 'src/app/services/recipe.service';
+import { User } from 'src/app/models/user.model';
+import { AuthService } from 'src/app/services/auth.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-recipe',
   templateUrl: './recipe.component.html',
-  styleUrls: ['./recipe.component.css']
+  styleUrls: ['./recipe.component.css'],
 })
 export class RecipeComponent implements OnInit {
   private recipeService = inject(RecipeService);
   private route = inject(ActivatedRoute);
   private navigation = inject(BackNavigationService);
-  recipe: any;
-  moreFromCategory: any;
-  moreFromUser: any;
+  private toast = inject(ToastrService);
+
+  dataFromServer: any;
+  user: User | null;
   isIngredientsOpen: boolean = false;
   isHowToOpen: boolean = false;
+  likes: number;
+  alreadyLiked: boolean;
 
-  ngOnInit(): void {
-    this.route.params.subscribe(params => {
-      const { slug } = params;
-      this.recipeService.getRecipe(slug).result$.subscribe(data => {
-        this.recipe = {...data};
-        if(this.recipe.isSuccess) {
-          this.getCategoryAndUserRecipes(this.recipe.data.category, this.recipe.data.owner._id);
-        }
-      });
-    });
+  constructor(private authService: AuthService) {
+    this.authService.getUser().subscribe((user) => (this.user = user));
   }
 
-  getCategoryAndUserRecipes(category: String, userId: String) {
-    this.recipeService.getTenMoreRecipesFromCategory(category).result$.subscribe(data => {
-      this.moreFromCategory = {...data};
-    });
-    this.recipeService.getTenMoreRecipesFromUser(userId).result$.subscribe(data => {
-      this.moreFromUser = {...data};
+  ngOnInit(): void {
+    this.route.params.subscribe((params) => {
+      const { slug } = params;
+      this.recipeService.getRecipe(slug).result$.subscribe((data) => {
+        this.dataFromServer = { ...data };
+        if(this.dataFromServer.isSuccess) {
+          this.alreadyLiked = this.dataFromServer.data.recipe.alreadyLiked;
+          this.likes = this.dataFromServer.data.recipe.likes;
+        }
+      });
     });
   }
 
@@ -53,5 +55,31 @@ export class RecipeComponent implements OnInit {
 
   toggleHowTo() {
     this.isHowToOpen = !this.isHowToOpen;
+  }
+
+  likeRecipe(recipeId: string) {
+    this.recipeService.likeRecipe(recipeId).subscribe({
+      next: () => {
+        this.alreadyLiked = true;
+        this.likes += 1;
+        this.toast.success('Recipe liked', 'Success');
+      },
+      error: (error) => {
+        this.toast.error(error.error.message, 'Error');
+      }
+    })
+  }
+
+  dislikeRecipe(recipeId: string) {
+    this.recipeService.dislikeRecipe(recipeId).subscribe({
+      next: () => {
+        this.alreadyLiked = false;
+        this.likes = this.likes == 0 ? 0 : this.likes - 1;
+        this.toast.success('Recipe disliked', 'Success');
+      },
+      error: (error) => {
+        this.toast.error(error.error.message, 'Error');
+      }
+    })
   }
 }

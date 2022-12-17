@@ -1,5 +1,5 @@
-const { getAllRecipes, createRecipe, getRecipe, updateRecipe, deleteRecipe, getLastTenRecipes, getTenMostPopularRecipes, getMyLikedRecipes, getTenMoreFromCategory, getTenMoreFromUser } = require('../controllers/recipesController');
-const { protect } = require('../middlewares/authMiddleware');
+const { getAllRecipes, createRecipe, getRecipe, updateRecipe, deleteRecipe, likeRecipe, dislikeRecipe, getMyRecipes, getRecentAndFavoriteAndLiked } = require('../controllers/recipesController');
+const { protect, getUser } = require('../middlewares/authMiddleware');
 
 const recipesRoute = require('express').Router();
 
@@ -9,28 +9,47 @@ recipesRoute
     .post(protect, createRecipe);
 
 recipesRoute
-    .route('/recent')
-    .get(getLastTenRecipes);
+    .route('/recentPopularLiked')
+    .get(getUser, getRecentAndFavoriteAndLiked);
 
 recipesRoute
-    .route('/popular')
-    .get(getTenMostPopularRecipes);
+    .route('/mine')
+    .get(protect, getMyRecipes);
+
+// recipesRoute
+//     .route('/recent')
+//     .get(getLastTenRecipes);
+
+// recipesRoute
+//     .route('/popular')
+//     .get(getTenMostPopularRecipes);
+
+// recipesRoute
+//     .route('/more/category/:recipeId/:category')
+//     .get(getTenMoreFromCategory);
+
+// recipesRoute
+//     .route('/more/user/:recipeId/:userId')
+//     .get(getTenMoreFromUser);
+
+// recipesRoute
+//    .route('/liked')
+//    .get(protect, getMyLikedRecipes);
 
 recipesRoute
-    .route('/more/category/:category')
-    .get(getTenMoreFromCategory);
+   .route('/:recipeId/like')
+   .get(protect, likeRecipe)
 
 recipesRoute
-    .route('/more/user/:userId')
-    .get(getTenMoreFromUser);
-
-recipesRoute
-    .route('/liked')
-    .get(protect, getMyLikedRecipes);
+   .route('/:recipeId/dislike')
+   .get(protect, dislikeRecipe)
 
 recipesRoute
    .route('/:slug')
-   .get(getRecipe)
+   .get(getUser, getRecipe)
+
+recipesRoute
+   .route('/:recipeId')
    .put(protect, updateRecipe)
    .delete(protect, deleteRecipe);
 

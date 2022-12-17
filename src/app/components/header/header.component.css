@@ -24,17 +24,6 @@
   color: var(--text-color);
 }
 
-.dropdown-item:hover,
-.dropdown-item:focus {
-  background-color: var(--primary);
-  color: #fff;
-}
-
-.dropdown-item:active,
-.dropdown-item.active {
-  background-color: var(--primary);
-}
-
 .navbar-toggler {
   font-size: 1rem;
   border: 1px solid var(--primary25);

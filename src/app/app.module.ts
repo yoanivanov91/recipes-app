@@ -2,10 +2,11 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { HttpClientModule } from '@angular/common/http';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 import { provideQueryClientOptions } from '@ngneat/query';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './components/login/login.component';
@@ -21,6 +22,8 @@ import { AddRecipeComponent } from './components/add-recipe/add-recipe.component
 import { NotFoundComponent } from './components/not-found/not-found.component';
 import { EditRecipeComponent } from './components/edit-recipe/edit-recipe.component';
 import { RecipeItemComponent } from './components/recipe-item/recipe-item.component';
+
+import { AuthInterceptor } from './interceptors/auth.interceptor';
 
 @NgModule({
   declarations: [
@@ -43,9 +46,15 @@ import { RecipeItemComponent } from './components/recipe-item/recipe-item.compon
     BrowserModule,
     HttpClientModule,
     AppRoutingModule,
-    FormsModule,
+    // FormsModule,
+    ReactiveFormsModule,
     BrowserAnimationsModule,
-    ToastrModule.forRoot()
+    ToastrModule.forRoot(({
+      closeButton: true,
+      progressBar: true,
+      timeOut: 3000,
+      positionClass: 'toast-bottom-right',
+    }))
   ],
   providers: [
     provideQueryClientOptions({
@@ -55,6 +64,7 @@ import { RecipeItemComponent } from './components/recipe-item/recipe-item.compon
         },
       },
     }),
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
   ],
   bootstrap: [AppComponent]
 })

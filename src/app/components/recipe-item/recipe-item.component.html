@@ -1,27 +1,28 @@
 <div class="card shadow-sm">
-  <img
-    src="{{recipe.image}}"
-    class="card-img-top"
-    alt="{{recipe.title}}"
-  />
+  <img src="{{ recipe.image }}" class="card-img-top" alt="{{ recipe.title }}" />
   <div class="card-body">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-      <span class="badge badge-icon">{{recipe.category}}</span>
-      <a href="#" title="Like" class="z-index-up"
-        ><i class="bi bi-heart-fill icon-button-size icon-button-color"></i
-      ></a>
-    </div>
-    <h5 class="card-title mb-3">{{recipe.title}}</h5>
+    <span class="badge badge-icon mb-3">{{ recipe.category }}</span>
+    <!-- <div class="d-flex justify-content-between align-items-center mb-3"> -->
+      <!-- <button *ngIf="user" class="z-index-up button-style-reset p-0" title="Like" role="button">
+        <i class="bi bi-heart-fill icon-button-size heart-button-color"></i>
+      </button> -->
+    <!-- </div> -->
+    <h5 class="card-title mb-3">{{ recipe.title }}</h5>
     <div class="d-flex justify-content-between align-items-center">
       <div class="d-flex align-items-center">
         <i class="bi bi-clock icon-button-size me-2"></i>
-        <span>{{recipe.time ? recipe.time : 'N/A'}} mins</span>
+        <span>{{ recipe.time ? recipe.time : "N/A" }} mins</span>
       </div>
       <div class="d-flex align-items-center">
         <i class="bi bi-hand-thumbs-up icon-button-size me-2"></i>
-        <span>{{recipe.likes}} {{recipe.likes == 1 ? ' like' : ' likes' }}</span>
+        <span
+          >{{ recipe.likes }} {{ recipe.likes == 1 ? " like" : " likes" }}</span
+        >
       </div>
     </div>
-    <a routerLink="/recipes/details/{{recipe.slug}}" class="stretched-link"></a>
+    <a
+      routerLink="/recipes/details/{{ recipe.slug }}"
+      class="stretched-link"
+    ></a>
   </div>
 </div>

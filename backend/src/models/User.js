@@ -21,12 +21,6 @@ const userSchema = mongoose.Schema({
         type: String,
         trim: true,
         required: true
-    },
-    likedRecipes: {
-        type: [mongoose.Types.ObjectId],
-        ref: 'Recipe',
-        required: true,
-        default: []
     }
 },
 {

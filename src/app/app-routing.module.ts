@@ -10,6 +10,7 @@ import { NotFoundComponent } from './components/not-found/not-found.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { RecipeComponent } from './components/recipe/recipe.component';
 import { RegisterComponent } from './components/register/register.component';
+import { AuthGuard } from './guards/auth.guard';
 
 const routes: Routes = [
   { path: '', title: "Recipes - All the best recipes in one place", component: HomeComponent },
@@ -17,7 +18,7 @@ const routes: Routes = [
   { path: 'recipes/add', title: "Recipes - Add a new recipe", component: AddRecipeComponent },
   { path: 'recipes/details/:slug', title: "Recipes - details", component: RecipeComponent },
   { path: 'recipes/edit/:slug', title: "Recipes - edit", component: EditRecipeComponent },
-  { path: 'profile', title: "Recipes - My profile", component: ProfileComponent },
+  { path: 'profile', canActivate: [AuthGuard], title: "Recipes - My profile", component: ProfileComponent },
   { path: 'my-recipes', title: "Recipes - My recipes", component: MyRecipesComponent },
   { path: 'auth/login', title: "Recipes - Login", component: LoginComponent },
   { path: 'auth/register', title: "Recipes - Register", component: RegisterComponent },

@@ -1,14 +1,94 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Router } from '@angular/router';
+import { BehaviorSubject, map, EMPTY } from 'rxjs';
+import { ToastrService } from 'ngx-toastr';
+import { environment } from '../environment/environment';
+import { User } from '../models/user.model';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
   private http = inject(HttpClient);
-  
-  login(email: String, password: String): Observable<any> {
-    return this.http.post<any>('/api/login', {email, password});
+  private router = inject(Router);
+  private toast = inject(ToastrService);
+
+  private readonly api_url = environment.api_url;
+  private readonly options = {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  };
+
+  private user = new BehaviorSubject<User | null>(null);
+
+  public register(user: User) {
+    return this.http
+      .post<User>(`${this.api_url}/users/register`, user, this.options)
+      .pipe(
+        map((user) => {
+          if (user && user.token) {
+            localStorage.setItem('token', JSON.stringify(user.token));
+            this.user.next(user);
+            this.router.navigate(['/']);
+            return this.toast.success(
+              `Your registration was successful`,
+              `Welcome, ${user.firstName}`
+            );
+          }
+          return this.user.next(null);
+        })
+      );
+  }
+
+  public login(email: String, password: String) {
+    return this.http
+      .post<User>(
+        `${this.api_url}/users/login`,
+        { email, password },
+        this.options
+      )
+      .pipe(
+        map((user) => {
+          if (user && user.token) {
+            localStorage.setItem('token', JSON.stringify(user.token));
+            this.user.next(user);
+            return user;
+          }
+          return null;
+        })
+      );
+  }
+
+  public logout() {
+    localStorage.removeItem('token');
+    this.user.next(null);
+  }
+
+  public fetchUserOnStart() {
+    const token = this.getToken();
+    if (token) {
+      return this.http.get<User>(`${this.api_url}/users/me`, this.options).pipe(
+        map((user) => {
+          if (user) {
+            this.user.next(user);
+          }
+        })
+      );
+    }
+    return EMPTY;
+  }
+
+  public getUser() {
+    return this.user.asObservable();
+  }
+
+  public getUserAsValue() {
+    return this.user.getValue();
+  }
+
+  public getToken() {
+    return JSON.parse(<string>localStorage.getItem('token'));
   }
 }

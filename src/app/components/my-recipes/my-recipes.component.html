@@ -1,4 +1,56 @@
 <div class="hero animate__animated animate__fadeIn">
     <img src="/assets/images/my-recipes.jpg" alt="My recipes" width="100%" height="100%" />
 </div>
-<p>my-recipes works!</p>
+<div class="my-recipes-container animate__animated animate__slideInUp animate__fast">
+    <div
+      class="d-flex justify-content-center"
+      *ngIf="myRecipes.isLoading || myRecipes.isError"
+    >
+      <div
+        class="spinner-border"
+        role="status"
+        *ngIf="myRecipes.isLoading"
+      >
+        <span class="visually-hidden">Loading...</span>
+      </div>
+      <p class="m-0" *ngIf="myRecipes.isError">Oops! Something went wrong while getting the recipes for you. Please refresh the page.</p>
+    </div>
+
+    <ng-container *ngIf="myRecipes.isSuccess">
+        <table class="table m-0" *ngIf="myRecipes.data.length > 0">
+            <thead>
+                <tr>
+                <th scope="col">Image</th>
+                <th scope="col">Title</th>
+                <th scope="col">Category</th>
+                <th scope="col">Time</th>
+                <th scope="col">Likes</th>
+                <th scope="col">Ingredients</th>
+                <th scope="col">How to prepare</th>
+                <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="align-middle" *ngFor="let recipe of myRecipes.data">
+                    <td><img src="{{recipe.image}}" alt="{{recipe.title}}" class="recipe-img" /></td>
+                    <td>{{recipe.title}}</td>
+                    <td>{{recipe.category}}</td>
+                    <td class="max-content">{{recipe.time}} mins</td>
+                    <td class="max-content">{{recipe.likes}} {{recipe.likes == 1 ? 'like' : 'likes'}}</td>
+                    <td>{{recipe.ingredients.join(', ')}}</td>
+                    <td>{{recipe.description}}</td>
+                    <td class="max-content">
+                        <div class="buttons">
+                            <a routerLink="/recipes/details/{{recipe.slug}}" title="Go to recipe"><i class="bi bi-box-arrow-up-right icon-button-size icon-button-color"></i></a>
+                            <a routerLink="/recipes/edit/{{recipe.slug}}" title="Edit recipe"><i class="bi bi-pencil-square icon-button-size icon-button-color"></i></a>
+                            <button class="button-style-reset p-0" role="button" title="Delete recipe"><i class="bi bi-trash-fill icon-button-size heart-button-color"></i></button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </ng-container>
+    <p class="m-0 no-elements" *ngIf="myRecipes.data.length == 0">
+        You haven't added any recipes yet.
+    </p>
+</div>
