@@ -31,13 +31,9 @@ export class AuthService {
           if (user && user.token) {
             localStorage.setItem('token', JSON.stringify(user.token));
             this.user.next(user);
-            this.router.navigate(['/']);
-            return this.toast.success(
-              `Your registration was successful`,
-              `Welcome, ${user.firstName}`
-            );
+            return user;
           }
-          return this.user.next(null);
+          return null;
         })
       );
   }
@@ -73,7 +69,14 @@ export class AuthService {
         map((user) => {
           if (user) {
             this.user.next(user);
+            console.log('if there is user in AuthService')
+            console.log(user);
+            return user;
           }
+          this.user.next(null);
+          console.log('if there isnt user in AuthService');
+          console.log(this.getUserAsValue());
+          return this.getUserAsValue();
         })
       );
     }

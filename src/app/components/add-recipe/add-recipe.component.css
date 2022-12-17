@@ -1,0 +1,49 @@
+.add-recipe-container {
+    width: 100%;
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+  }
+  
+  .form-container {
+    display: grid;
+    place-items: center;
+    padding: 50px;
+  }
+
+  form {
+    width: 100%;
+  }
+  
+  .recipe-img {
+    height: 100%;
+    background-image: url("/assets/images/register2.jpg");
+    background-position: center center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    border-top-left-radius: var(--border-radius);
+    border-bottom-left-radius: var(--border-radius);
+  }
+
+  .recipe-img-placeholder {
+    height: 100%;
+    display: grid;
+    place-items: center;
+    background-color: var(--bs-light);
+    border-top-left-radius: var(--border-radius);
+    border-bottom-left-radius: var(--border-radius);
+  }
+
+  .img-preview {
+    font-size: 1.5rem;
+  }
+
+  select {
+    color: var(--bs-gray-600);
+  }
+
+  option {
+    color: var(--text-color);
+  }
+  

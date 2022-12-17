@@ -75,8 +75,8 @@ const getRecipe = asyncHandler(async (req, res) => {
 });
 
 const createRecipe = asyncHandler(async (req, res) => {
-    const {title, category, image, ingredients, description, ...rest } = req.body;
-    if(title == '' || category == '' || image == '' || ingredients.length == 0 || description == '') {
+    const {title, category, image, ingredients, description, time } = req.body;
+    if(title == '' || category == '' || image == '' || ingredients.length == 0 || description == '' || time == '') {
         res.status(400)
         throw new Error(`Please fill out the required fields`);
     }
@@ -87,7 +87,7 @@ const createRecipe = asyncHandler(async (req, res) => {
         image,
         ingredients,
         description,
-        ...rest,
+        time,
         likes: 0,
         owner: req.user._id
     });
@@ -95,8 +95,8 @@ const createRecipe = asyncHandler(async (req, res) => {
 });
 
 const updateRecipe = asyncHandler(async (req, res) => {
-    const {title, category, image, ingredients, description, ...rest } = req.body;
-    if(title == '' || category == '' || image == '' || ingredients.length == 0 || description == '') {
+    const {title, category, image, ingredients, description, time } = req.body;
+    if(title == '' || category == '' || image == '' || ingredients.length == 0 || description == '' || time == '') {
         res.status(400)
         throw new Error(`Please fill out the required fields`);
     }

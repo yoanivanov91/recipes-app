@@ -5,6 +5,7 @@ mongoose.plugin(slug);
 const recipeSchema = mongoose.Schema({
     title: {
         type: String,
+        minLength: [4, 'Title must be at least 4 characters long'],
         trim: true,
         required: true
     },
@@ -34,6 +35,7 @@ const recipeSchema = mongoose.Schema({
     },
     time: {
         type: Number,
+        required: true,
         trim: true,
     },
     likes: {

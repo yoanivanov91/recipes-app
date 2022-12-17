@@ -7,7 +7,7 @@
     <h1 class="headline">Login</h1>
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" novalidate>
       <div class="mb-3">
-        <label for="email" class="form-label">Email</label>
+        <label for="email" class="form-label is-required">Email</label>
         <input
           type="text"
           class="form-control"
@@ -15,11 +15,11 @@
           formControlName="email"
           [ngClass]="{ 'is-invalid': submitted && form.email.errors, 'is-valid': submitted && !form.email.errors }"
         />
-        <div class="invalid-feedback" *ngIf="submitted && form.email.errors?.required">Please enter an email</div>
+        <div class="invalid-feedback" *ngIf="submitted && form.email.errors?.required">Please enter your email</div>
         <div class="invalid-feedback" *ngIf="submitted && form.email.errors?.email">Please enter a valid email</div>
       </div>
       <div class="mb-3">
-        <label for="password" class="form-label">Password</label>
+        <label for="password" class="form-label is-required">Password</label>
         <input
           type="password"
           class="form-control"
@@ -27,20 +27,18 @@
           formControlName="password"
           [ngClass]="{ 'is-invalid': submitted && form.password.errors, 'is-valid': submitted && !form.password.errors }"
         />
-        <div class="invalid-feedback" *ngIf="submitted && form.password.errors?.required">Please enter a password</div>
+        <div class="invalid-feedback" *ngIf="submitted && form.password.errors?.required">Please enter your password</div>
       </div>
-      <div class="col-12">
         <button
-          class="btn my-primary-btn primary w-100"
+          class="btn my-primary-btn w-100"
           type="submit"
         >
           Login
         </button>
-      </div>
     </form>
     <p class="mb-0 mt-3">
       Don't have an account?<br />You can register
-      <a class="simple-link" routerLink="/auth/register">here</a>
+      <a class="simple-link" routerLink="/auth/register" [queryParams]="{ returnUrl: this.returnUrl ? this.returnUrl : null}">here</a>
     </p>
   </div>
 </div>

@@ -11,17 +11,18 @@ import { ProfileComponent } from './components/profile/profile.component';
 import { RecipeComponent } from './components/recipe/recipe.component';
 import { RegisterComponent } from './components/register/register.component';
 import { AuthGuard } from './guards/auth.guard';
+import { GuestsOnlyGuard } from './guards/guests-only.guard';
 
 const routes: Routes = [
   { path: '', title: "Recipes - All the best recipes in one place", component: HomeComponent },
   { path: 'recipes', title: "Recipes - All recipes", component: AllRecipesComponent },
-  { path: 'recipes/add', title: "Recipes - Add a new recipe", component: AddRecipeComponent },
-  { path: 'recipes/details/:slug', title: "Recipes - details", component: RecipeComponent },
-  { path: 'recipes/edit/:slug', title: "Recipes - edit", component: EditRecipeComponent },
+  { path: 'recipes/details/:slug', title: "Recipes - Details", component: RecipeComponent },
+  { path: 'recipes/add', canActivate: [AuthGuard], title: "Recipes - Add a new recipe", component: AddRecipeComponent },
+  { path: 'recipes/edit/:slug', canActivate: [AuthGuard], title: "Recipes - Edit", component: EditRecipeComponent },
   { path: 'profile', canActivate: [AuthGuard], title: "Recipes - My profile", component: ProfileComponent },
-  { path: 'my-recipes', title: "Recipes - My recipes", component: MyRecipesComponent },
-  { path: 'auth/login', title: "Recipes - Login", component: LoginComponent },
-  { path: 'auth/register', title: "Recipes - Register", component: RegisterComponent },
+  { path: 'my-recipes', canActivate: [AuthGuard], title: "Recipes - My recipes", component: MyRecipesComponent },
+  { path: 'auth/login', canActivate: [GuestsOnlyGuard], title: "Recipes - Login", component: LoginComponent },
+  { path: 'auth/register', canActivate: [GuestsOnlyGuard], title: "Recipes - Register", component: RegisterComponent },
   { path: '**', pathMatch: "full", title: "Recipes - Page not found", component: NotFoundComponent },
 ];
 

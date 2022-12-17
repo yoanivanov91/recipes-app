@@ -12,9 +12,13 @@
   padding: 50px;
 }
 
+form {
+  width: 100%;
+}
+
 .register-img {
   height: 100%;
-  background-image: url("/assets/images/login-left.jpg");
+  background-image: url("/assets/images/register2.jpg");
   background-position: center center;
   background-size: cover;
   background-repeat: no-repeat;
