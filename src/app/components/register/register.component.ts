@@ -2,24 +2,27 @@ import {
   Component,
   OnInit,
   inject,
+  OnDestroy,
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
 import { ToastrService } from 'ngx-toastr';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms'
 import { CustomValidators } from 'src/app/helpers/custom-validators';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css']
 })
-export class RegisterComponent implements OnInit {
+export class RegisterComponent implements OnInit, OnDestroy {
   private authService = inject(AuthService);
   private router = inject(Router);
   private toast = inject(ToastrService);
   private route = inject(ActivatedRoute);
   private fb = inject(FormBuilder);
+  private ngUnsubscribe = new Subject<void>();
 
   submitted: boolean = false;
   registerForm: FormGroup = this.fb.group({
@@ -54,7 +57,7 @@ export class RegisterComponent implements OnInit {
     } else {
       const { passwordValidation, ...userData } = this.registerForm.value;
       const user = {...userData, password: passwordValidation.password};
-      this.authService.register(user).subscribe({
+      this.authService.register(user).pipe(takeUntil(this.ngUnsubscribe)).subscribe({
         next: (user) => {
           this.returnUrl ? this.router.navigate([this.returnUrl]) : this.router.navigate(['/']);
           this.toast.success(`Welcome, ${user?.firstName}`, `Account created`);
@@ -67,5 +70,10 @@ export class RegisterComponent implements OnInit {
       });
       return true;
     }
+  }
+
+  ngOnDestroy(): void {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 }

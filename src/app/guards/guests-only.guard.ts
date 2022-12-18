@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+import { map, Observable } from 'rxjs';
 import { AuthService } from '../services/auth.service';
-import { BackNavigationService } from '../services/back-navigation.service';
 
 
 @Injectable({
@@ -11,17 +11,21 @@ export class GuestsOnlyGuard implements CanActivate {
 
   private router = inject(Router);
   private authService = inject(AuthService);
-  private navigate = inject(BackNavigationService);
 
-  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | boolean {
     const user = this.authService.getUserAsValue();
     if (user) {
-      // this.router.navigate(['/auth/login'], { queryParams: { returnUrl: state.url } });
-      this.navigate.back();
+      this.router.navigate(['/']);
       return false;
     }
-    
-    return true;
+
+    return this.authService.fetchUserOnStart().pipe(map(user => {
+      if(user) {
+        this.router.navigate(['/']);
+        return false; 
+      }
+      return true;
+    }))
   }
 
 }

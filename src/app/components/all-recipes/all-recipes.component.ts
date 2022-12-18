@@ -1,7 +1,7 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { RecipeService } from 'src/app/services/recipe.service';
 import { ActivatedRoute } from '@angular/router';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { Recipe } from 'src/app/models/recipe.model';
 
 @Component({
@@ -9,23 +9,23 @@ import { Recipe } from 'src/app/models/recipe.model';
   templateUrl: './all-recipes.component.html',
   styleUrls: ['./all-recipes.component.css']
 })
-export class AllRecipesComponent implements OnInit {
+export class AllRecipesComponent implements OnInit, OnDestroy {
   private recipeService = inject(RecipeService);
   private route = inject(ActivatedRoute);
-
+  
+  private ngUnsubscribe = new Subject<void>();
   dataFromServer: any;
   showRecipesSubject = new BehaviorSubject<any>([]);
   showRecipes$ = this.showRecipesSubject.asObservable();
   allRecipes: Recipe[];
-
   show: String = 'recent';
   
   ngOnInit(): void {
-    this.recipeService.getAllRecipes().result$.subscribe((recipeData) => {
+    this.recipeService.getAllRecipes().result$.pipe(takeUntil(this.ngUnsubscribe)).subscribe((recipeData) => {
       this.dataFromServer = { ...recipeData };
       this.showRecipesSubject.next(this.dataFromServer.data);
     });
-    this.showRecipes$.subscribe(recipes => this.allRecipes = recipes);
+    this.showRecipes$.pipe(takeUntil(this.ngUnsubscribe)).subscribe(recipes => this.allRecipes = recipes);
   }
     
   showRecipes(filter: string) {
@@ -37,5 +37,10 @@ export class AllRecipesComponent implements OnInit {
       this.show = 'recent';
       this.showRecipesSubject.next(this.dataFromServer.data);
     }
+  }
+
+  ngOnDestroy(): void {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 }

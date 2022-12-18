@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { BehaviorSubject, map, EMPTY } from 'rxjs';
+import { BehaviorSubject, map, EMPTY, of } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { environment } from '../environment/environment';
 import { User } from '../models/user.model';
@@ -69,18 +69,14 @@ export class AuthService {
         map((user) => {
           if (user) {
             this.user.next(user);
-            console.log('if there is user in AuthService')
-            console.log(user);
             return user;
           }
           this.user.next(null);
-          console.log('if there isnt user in AuthService');
-          console.log(this.getUserAsValue());
           return this.getUserAsValue();
         })
       );
     }
-    return EMPTY;
+    return of(null);
   }
 
   public getUser() {

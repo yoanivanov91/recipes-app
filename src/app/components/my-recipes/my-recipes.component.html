@@ -1,26 +1,36 @@
 <div class="hero animate__animated animate__fadeIn">
     <img src="/assets/images/my-recipes.jpg" alt="My recipes" width="100%" height="100%" />
 </div>
+<div class="overflow-hidden padding-fix">
 <div class="my-recipes-container animate__animated animate__slideInUp animate__fast">
     <div
       class="d-flex justify-content-center"
-      *ngIf="myRecipes.isLoading || myRecipes.isError"
+      *ngIf="dataFromServer.isLoading || dataFromServer.isError"
     >
       <div
         class="spinner-border"
         role="status"
-        *ngIf="myRecipes.isLoading"
+        *ngIf="dataFromServer.isLoading"
       >
         <span class="visually-hidden">Loading...</span>
       </div>
-      <p class="m-0" *ngIf="myRecipes.isError">Oops! Something went wrong while getting the recipes for you. Please refresh the page.</p>
+      <p class="m-0" *ngIf="dataFromServer.isError">Oops! Something went wrong while getting the recipes for you. Please refresh the page.</p>
     </div>
 
     <div>
-        <h1 class="headline">My recipes</h1>
-        <ng-container *ngIf="myRecipes.isSuccess">
-            <div class="table-responsive" *ngIf="myRecipes.data.length > 0">
-            <table class="table table-hover m-0">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h1 class="headline m-0">My recipes</h1>
+            <button class="simple-link fw-semibold dropdown-toggle button-style-reset p-0" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                {{show === 'added' ? 'Added' : 'Liked'}}
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+                <li><button [ngClass]="{'active': show !== 'liked'}" class="dropdown-item button-style-reset" (click)="showRecipes('added')">Added</button></li>
+                <li><button [ngClass]="{'active': show === 'liked'}" class="dropdown-item button-style-reset" (click)="showRecipes('liked')">Liked</button></li>
+            </ul>
+        </div>
+        <ng-container *ngIf="dataFromServer.isSuccess">
+            <div class="table-responsive" *ngIf="recipes.length > 0">
+            <table class="table m-0">
                 <thead>
                     <tr>
                     <th scope="col">Image</th>
@@ -34,28 +44,30 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr class="align-middle" *ngFor="let recipe of myRecipes.data">
-                        <td><img src="{{recipe.image}}" alt="{{recipe.title}}" class="recipe-img" /></td>
-                        <td>{{recipe.title}}</td>
-                        <td>{{recipe.category}}</td>
-                        <td class="max-content">{{recipe.time}} mins</td>
-                        <td class="max-content">{{recipe.likes}} {{recipe.likes == 1 ? 'like' : 'likes'}}</td>
-                        <td>{{recipe.ingredients.join(', ')}}</td>
-                        <td>{{recipe.description}}</td>
-                        <td class="max-content">
-                            <div class="buttons">
-                                <a routerLink="/recipes/details/{{recipe.slug}}" title="Go to recipe"><i class="bi bi-box-arrow-up-right icon-button-size icon-button-color"></i></a>
-                                <a routerLink="/recipes/edit/{{recipe.slug}}" title="Edit recipe"><i class="bi bi-pencil-square icon-button-size icon-button-color"></i></a>
-                                <button class="button-style-reset p-0" role="button" title="Delete recipe"><i class="bi bi-trash-fill icon-button-size heart-button-color"></i></button>
-                            </div>
-                        </td>
-                    </tr>
+                    <ng-container *ngFor="let recipe of recipes">
+                        <tr routerLink="/recipes/details/{{recipe.slug}}" class="align-middle">
+                            <td><img src="{{recipe.image}}" alt="{{recipe.title}}" class="recipe-img" /></td>
+                            <td>{{recipe.title}}</td>
+                            <td>{{recipe.category}}</td>
+                            <td class="max-content">{{recipe.time}} mins</td>
+                            <td class="max-content">{{recipe.likes}} {{recipe.likes == 1 ? 'like' : 'likes'}}</td>
+                            <td>{{recipe.ingredients.join(', ')}}</td>
+                            <td>{{recipe.description}}</td>
+                            <td class="max-content">
+                                <div class="buttons">
+                                    <a routerLink="/recipes/edit/{{recipe.slug}}" title="Edit recipe"><i class="bi bi-pencil-square icon-button-size icon-button-color"></i></a>
+                                    <button class="button-style-reset p-0" role="button" title="Delete recipe"><i class="bi bi-trash-fill icon-button-size heart-button-color"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                    </ng-container>
                 </tbody>
             </table>
             </div>
-            <p class="m-0 no-elements" *ngIf="myRecipes.data.length == 0">
+            <p class="m-0 no-elements" *ngIf="recipes.length == 0">
                 You haven't added any recipes yet.
             </p>
         </ng-container>
     </div>
+</div>
 </div>

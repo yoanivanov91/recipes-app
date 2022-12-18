@@ -53,13 +53,14 @@ import { AuthInterceptor } from './interceptors/auth.interceptor';
       closeButton: true,
       progressBar: true,
       timeOut: 3000,
-      positionClass: 'toast-bottom-right',
+      positionClass: 'toast-bottom-left',
     }))
   ],
   providers: [
     provideQueryClientOptions({
       defaultOptions: {
         queries: {
+          staleTime: 5 * 60 * 1000,
           refetchOnWindowFocus: false
         },
       },

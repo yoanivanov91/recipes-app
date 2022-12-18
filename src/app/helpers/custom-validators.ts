@@ -11,16 +11,4 @@ export class CustomValidators {
       return null
     }
   }
-
-  static isValidURL(abstractControl: AbstractControl) {
-    let image = abstractControl.get('image')?.value;
-     if (!image.startsWith('http://') || !image.startsWith('https://')) {
-        return abstractControl.get('image')?.setErrors({
-           invalidURL: true
-         })
-    } else {
-      return null
-    }
-  }
-  
 }

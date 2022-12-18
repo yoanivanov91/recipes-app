@@ -1,4 +1,256 @@
-<div class="hero animate__animated animate__fadeIn">
-    <img src="/assets/images/edit-recipe.jpg" alt="Edit recipe" width="100%" height="100%" />
+<div
+  class="d-flex justify-content-center centered-error-loading-container"
+  *ngIf="dataFromServer.isLoading || dataFromServer.isError"
+>
+  <div class="spinner-border" role="status" *ngIf="dataFromServer.isLoading">
+    <span class="visually-hidden">Loading...</span>
+  </div>
+  <p class="m-0" *ngIf="dataFromServer.isError">
+    Oops! Something went wrong while setting up the edit form for you. Please
+    refresh the page.
+  </p>
 </div>
-<p>edit-recipe works!</p>
+<ng-container *ngIf="dataFromServer.isSuccess">
+  <div class="hero animate__animated animate__fadeIn">
+    <img
+      src="/assets/images/edit-recipe.jpg"
+      alt="Edit recipe"
+      width="100%"
+      height="100%"
+    />
+  </div>
+  <div class="overflow-hidden padding-fix">
+    <div
+      class="edit-recipe-container animate__animated animate__slideInUp animate__fast"
+    >
+      <img
+        *ngIf="form.image.valid"
+        class="recipe-img"
+        [src]="form.image.value"
+        (error)="handleImageError()"
+      />
+      <div *ngIf="!form.image.valid" class="recipe-img-placeholder">
+        <p class="m-0 img-preview">Image preview</p>
+      </div>
+      <div>
+        <button
+          class="simple-link d-flex align-items-center fw-semibold button-style-reset p-0"
+          (click)="back()"
+        >
+          <i class="bi bi-arrow-left icon-button-size me-2"></i>
+          <span>Go back</span>
+        </button>
+
+        <div class="form-container">
+          <h1 class="headline">Edit recipe</h1>
+          <form [formGroup]="editRecipeForm" (ngSubmit)="onSubmit()" novalidate>
+            <div class="row mb-3">
+              <div class="col">
+                <label for="title" class="form-label is-required">Title</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="title"
+                  placeholder="Enter a title"
+                  formControlName="title"
+                  [ngClass]="{
+                    'is-invalid': submitted && form.title.errors,
+                    'is-valid': submitted && !form.title.errors
+                  }"
+                />
+                <div
+                  class="invalid-feedback"
+                  *ngIf="submitted && form.title.errors?.required"
+                >
+                  Please enter a title
+                </div>
+                <div
+                  class="invalid-feedback"
+                  *ngIf="submitted && form.title.errors?.minlength"
+                >
+                  Title must be at least 4 characters long
+                </div>
+              </div>
+              <div class="col">
+                <label for="category" class="form-label is-required"
+                  >Category</label
+                >
+                <select
+                  id="category"
+                  class="form-select"
+                  formControlName="category"
+                  [ngClass]="{
+                    'is-invalid': submitted && form.category.errors,
+                    'is-valid': submitted && !form.category.errors
+                  }"
+                  (change)="changeCategory($event)"
+                >
+                  <option hidden selected value="">Select a category</option>
+                  <option value="Appetizers">Appetizers</option>
+                  <option value="Main-courses">Main-courses</option>
+                  <option value="Side-dishes">Side-dishes</option>
+                  <option value="Salads">Salads</option>
+                  <option value="Soups">Soups</option>
+                  <option value="Desserts">Desserts</option>
+                </select>
+                <div
+                  class="invalid-feedback"
+                  *ngIf="submitted && form.category.errors?.required"
+                >
+                  Please select a category
+                </div>
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="col">
+                <label for="image" class="form-label is-required"
+                  >Image URL</label
+                >
+                <input
+                  type="text"
+                  class="form-control"
+                  id="image"
+                  placeholder="Enter an image URL"
+                  formControlName="image"
+                  [ngClass]="{
+                    'is-invalid':
+                      (submitted && form.image.errors) ||
+                      form.image.errors?.invalidURL,
+                    'is-valid': submitted && !form.image.errors
+                  }"
+                />
+                <div
+                  class="invalid-feedback"
+                  *ngIf="submitted && form.image.errors?.required"
+                >
+                  Please enter an image URL
+                </div>
+                <div
+                  class="invalid-feedback"
+                  *ngIf="submitted && form.image.errors?.pattern"
+                >
+                  Please enter a valid image URL
+                </div>
+                <div
+                  class="invalid-feedback"
+                  *ngIf="form.image.errors?.invalidURL"
+                >
+                  Please enter a valid URL
+                </div>
+              </div>
+              <div class="col">
+                <label for="time" class="form-label is-required">Time</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  id="time"
+                  placeholder="Enter a time"
+                  formControlName="time"
+                  [ngClass]="{
+                    'is-invalid': submitted && form.time.errors,
+                    'is-valid': submitted && !form.time.errors
+                  }"
+                />
+                <div
+                  class="invalid-feedback"
+                  *ngIf="submitted && form.time.errors?.required"
+                >
+                  Please enter a time
+                </div>
+                <div
+                  class="invalid-feedback"
+                  *ngIf="submitted && form.time.errors?.min"
+                >
+                  Please enter a positive number
+                </div>
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="col-9">
+                <label for="ingredient" class="form-label is-required"
+                  >Ingredients</label
+                >
+                <input
+                  type="text"
+                  class="form-control"
+                  id="ingredient"
+                  placeholder="Enter an ingredient"
+                  formControlName="ingredient"
+                  [ngClass]="{
+                    'is-invalid':
+                      (submitted || added) && ingredients.length == 0,
+                    'is-valid': (submitted || added) && ingredients.length > 0
+                  }"
+                />
+                <div
+                  class="invalid-feedback"
+                  *ngIf="added && form.ingredient.errors?.required"
+                >
+                  Please enter an ingredient
+                </div>
+                <div
+                  class="invalid-feedback"
+                  *ngIf="submitted && ingredients.length == 0"
+                >
+                  Please enter some ingredients
+                </div>
+              </div>
+              <div class="col-3">
+                <label class="form-label invisible">Add</label>
+                <button
+                  class="btn my-primary-btn w-100"
+                  type="button"
+                  (click)="addIngredient()"
+                >
+                  Add
+                </button>
+              </div>
+            </div>
+            <div
+              class="ingredients-container mb-3"
+              *ngIf="ingredients.length > 0"
+            >
+              <ul class="m-0 ps-3">
+                <li *ngFor="let ingredient of ingredients; let index = index">
+                  <p (click)="removeIngredient(index)" class="ingredient mb-0">
+                    {{ ingredient }} <i class="bi bi-x heart-button-color"></i>
+                  </p>
+                </li>
+              </ul>
+            </div>
+
+            <div class="row mb-3">
+              <div class="col">
+                <label for="description" class="form-label is-required"
+                  >How to prepare</label
+                >
+                <textarea
+                  class="form-control"
+                  id="description"
+                  placeholder="Enter a description"
+                  rows="3"
+                  formControlName="description"
+                  [ngClass]="{
+                    'is-invalid': submitted && form.description.errors,
+                    'is-valid': submitted && !form.description.errors
+                  }"
+                >
+                </textarea>
+                <div
+                  class="invalid-feedback"
+                  *ngIf="submitted && form.description.errors?.required"
+                >
+                  Please enter how to prepare
+                </div>
+              </div>
+            </div>
+
+            <button class="btn my-primary-btn w-100" type="submit">
+              Edit recipe
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>

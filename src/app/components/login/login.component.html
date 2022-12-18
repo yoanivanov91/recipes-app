@@ -1,8 +1,9 @@
 <div class="hero animate__animated animate__fadeIn">
   <img src="/assets/images/login.jpg" alt="Login" width="100%" height="100%" />
 </div>
+<div class="overflow-hidden padding-fix">
 <div class="login-container animate__animated animate__slideInUp animate__fast">
-  <div class="login-img"></div>
+  <img src="/assets/images/login2.jpg" alt="Login" class="login-img" />
   <div class="form-container">
     <h1 class="headline">Login</h1>
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" novalidate>
@@ -37,8 +38,9 @@
         </button>
     </form>
     <p class="mb-0 mt-3">
-      Don't have an account?<br />You can register
+      Don't have an account? You can register
       <a class="simple-link" routerLink="/auth/register" [queryParams]="{ returnUrl: this.returnUrl ? this.returnUrl : null}">here</a>
     </p>
   </div>
+</div>
 </div>

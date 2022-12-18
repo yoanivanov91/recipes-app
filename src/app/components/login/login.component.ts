@@ -2,18 +2,20 @@ import {
   Component,
   OnInit,
   inject,
+  OnDestroy,
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from 'src/app/services/auth.service';
 import { FormGroup,  FormBuilder,  Validators } from '@angular/forms';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
   private authService = inject(AuthService);
   private router = inject(Router);
   private toast = inject(ToastrService);
@@ -26,6 +28,7 @@ export class LoginComponent implements OnInit {
     password: ['', Validators.required]
   });
   returnUrl: string | null;
+  private ngUnsubscribe = new Subject<void>();
 
   ngOnInit(): void {
     this.returnUrl = this.route.snapshot.queryParamMap.get('returnUrl');
@@ -41,7 +44,7 @@ export class LoginComponent implements OnInit {
       this.toast.error('Please fill up the necessary fields', 'Error');
       return false;
     } else {
-      this.authService.login(this.form.email.value, this.form.password.value).subscribe({
+      this.authService.login(this.form.email.value, this.form.password.value).pipe(takeUntil(this.ngUnsubscribe)).subscribe({
         next: (user) => {
           this.returnUrl ? this.router.navigate([this.returnUrl]) : this.router.navigate(['/']);
           this.toast.success(`Welcome, ${user?.firstName}`, `Logged in`);
@@ -53,5 +56,10 @@ export class LoginComponent implements OnInit {
       });
       return true;
     }
+  }
+
+  ngOnDestroy(): void {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 }

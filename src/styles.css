@@ -82,6 +82,17 @@ body {
   color: #fff;
 }
 
+.my-secondary-btn {
+  background-color: var(--secondary);
+  color: #fff;
+}
+
+.my-secondary-btn:hover,
+.my-secondary-btn:focus {
+  background-color: var(--secondary-hover);
+  color: #fff;
+}
+
 .simple-link {
   color: var(--primary);
   text-decoration: none;
@@ -179,21 +190,25 @@ body {
 }
 
 .form-label {
-    position: relative;
+  position: relative;
 }
-.form-label.is-required::after { 
-    color: var(--secondary);
-    content: "*";
-    position: absolute;
-    top:0px;
-    right:-12px;
+.form-label.is-required::after {
+  color: var(--secondary);
+  content: "*";
+  position: absolute;
+  top: 0px;
+  right: -12px;
 }
 
 .no-elements {
-    width: 100%;
-    height: 200px;
-    display: grid;
-    place-items: center;
-    border-radius: var(--border-radius);
-    background-color: var(--bs-light);
+  width: 100%;
+  height: 200px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--border-radius);
+  background-color: var(--bs-light);
+}
+
+.padding-fix {
+    padding-bottom: 1px;
 }

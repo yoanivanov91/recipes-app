@@ -22,8 +22,13 @@ const getRecentAndFavoriteAndLiked = asyncHandler(async (req, res) => {
 });
 
 const getMyRecipes = asyncHandler(async (req, res) => {
-    const recipes = await Recipe.find({owner: req.user._id}).sort({createdAt: -1});
-    res.status(200).json(recipes);
+    const mine = await Recipe.find({owner: req.user._id}).sort({createdAt: -1});
+    let liked = await Like.find({userId: req.user._id}).sort({createdAt: -1}).populate('recipeId')
+    liked = liked.map(recipe => recipe.recipeId);
+    res.status(200).json({
+        mine,
+        liked
+    });
 });
 
 // const getLastTenRecipes = asyncHandler(async (req, res) => {

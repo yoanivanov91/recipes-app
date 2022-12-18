@@ -6,8 +6,9 @@
     height="100%"
   />
 </div>
+<div class="overflow-hidden padding-fix">
 <div class="register-container animate__animated animate__slideInUp animate__fast">
-  <div class="register-img"></div>
+  <img src="/assets/images/register2.jpg" alt="Register" class="register-img" />
   <div class="form-container">
     <h1 class="headline">Register</h1>
     <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" novalidate>
@@ -49,7 +50,7 @@
                 [ngClass]="{ 'is-invalid': submitted && form.passwordValidation.get('confirmPassword')?.errors, 'is-valid': submitted && !form.passwordValidation.get('confirmPassword')?.errors }"
                 />
                 <div class="invalid-feedback" *ngIf="submitted && form.passwordValidation.get('confirmPassword')?.errors?.required">Please confirm your password</div>
-                <div class="invalid-feedback" *ngIf="submitted && form.passwordValidation.get('confirmPassword')?.errors?.matchPassword">Please confirm your password</div>
+                <div class="invalid-feedback" *ngIf="submitted && form.passwordValidation.get('confirmPassword')?.errors?.matchPassword">Passwords don't match</div>
             </div>
         </div>
       </ng-container>
@@ -88,4 +89,5 @@
       Already have an account? You can login <a class="simple-link" routerLink="/auth/login">here</a>
     </p>
   </div>
+</div>
 </div>

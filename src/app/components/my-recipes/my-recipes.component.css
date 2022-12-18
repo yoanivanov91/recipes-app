@@ -18,3 +18,11 @@
 table th {
     color: var(--secondary);
 }
+
+table tr {
+    transition: background-color 0.15s ease-in-out;
+}
+table tr:hover {
+    background-color: var(--bs-light);
+    cursor: pointer;
+}

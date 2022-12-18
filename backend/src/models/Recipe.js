@@ -35,6 +35,7 @@ const recipeSchema = mongoose.Schema({
     },
     time: {
         type: Number,
+        min: [1, 'Time must be a positive number'],
         required: true,
         trim: true,
     },

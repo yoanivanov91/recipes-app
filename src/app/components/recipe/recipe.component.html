@@ -12,10 +12,11 @@
 </div>
 <ng-container *ngIf="dataFromServer.isSuccess">
 <div class="recipe-container">
-    <div
-    class="recipe-img animate__animated animate__fadeIn"
-    style="background-image: url({{ dataFromServer.data.recipe.image }})"
-    ></div>
+    <img 
+        class="recipe-img animate__animated animate__fadeIn"
+        [src]="dataFromServer.data.recipe.image"
+        [alt]="dataFromServer.data.recipe.title"
+    />
     <div class="animate__animated animate__slideInRight animate__fast">
         <button
             class="simple-link d-flex align-items-center fw-semibold button-style-reset p-0"
@@ -38,16 +39,16 @@
                     </button>
                 </ng-container>
                 <!-- Add and remove from favorites -->
-                <button class="z-index-up button-style-reset p-0" title="Add to favorites" role="button">
+                <!-- <button class="z-index-up button-style-reset p-0" title="Add to favorites" role="button">
                     <i class="bi bi-heart icon-button-size heart-button-color"></i>
                 </button>
                 <button class="z-index-up button-style-reset p-0" title="Remove from favorites" role="button">
                     <i class="bi bi-heart-fill icon-button-size heart-button-color"></i>
-                </button>
+                </button> -->
                 <!-- Edit and Delete -->
                 <ng-container *ngIf="user._id == dataFromServer.data.recipe.owner._id">
                     <a routerLink="/recipes/edit/{{dataFromServer.data.recipe.slug}}" title="Edit recipe"><i class="bi bi-pencil-square icon-button-size icon-button-color"></i></a>
-                    <button class="button-style-reset p-0" role="button" title="Delete recipe"><i class="bi bi-trash-fill icon-button-size heart-button-color"></i></button>
+                    <button class="button-style-reset p-0" role="button" title="Delete recipe" data-bs-toggle="modal" data-bs-target="#deleteModal"><i class="bi bi-trash-fill icon-button-size heart-button-color"></i></button>
                 </ng-container>
             </div>
             </div>
@@ -114,8 +115,9 @@
         </div>
     </div>
 </div>
+<div class="overflow-hidden padding-fix">
 <div class="more-recipes-container animate__animated animate__slideInUp animate__fast">
-    <div>
+    <div *ngIf="dataFromServer.data.tenMoreFromCategory.length > 0">
         <h1 class="headline">More recipes from category {{dataFromServer.data.recipe.category}}</h1>
 
         <div class="cards">
@@ -128,7 +130,7 @@
         </div>
     </div>
     
-    <div>
+    <div *ngIf="dataFromServer.data.tenMoreFromUser.length > 0">
         <h1 class="headline">More recipes from {{dataFromServer.data.recipe.owner.firstName}}</h1>
 
         <div class="cards">
@@ -138,6 +140,25 @@
             >
             <app-recipe-item [recipe]="recipe"></app-recipe-item>
             </div>
+        </div>
+    </div>
+</div>
+</div>
+<!-- Delete Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h1 class="modal-title fs-5" id="deleteModalLabel">Deleting recipe</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            Are you sure you want to delete {{dataFromServer.data.recipe.title}}?
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn my-secondary-btn" (click)="deleteRecipe(dataFromServer.data.recipe._id)" data-bs-dismiss="modal">Delete</button>
+        </div>
         </div>
     </div>
 </div>
