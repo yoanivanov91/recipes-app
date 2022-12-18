@@ -46,7 +46,7 @@ import { AuthInterceptor } from './interceptors/auth.interceptor';
     BrowserModule,
     HttpClientModule,
     AppRoutingModule,
-    // FormsModule,
+    FormsModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
     ToastrModule.forRoot(({
@@ -60,7 +60,6 @@ import { AuthInterceptor } from './interceptors/auth.interceptor';
     provideQueryClientOptions({
       defaultOptions: {
         queries: {
-          staleTime: 5 * 60 * 1000,
           refetchOnWindowFocus: false
         },
       },

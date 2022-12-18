@@ -37,12 +37,16 @@ recipesRoute
 //    .get(protect, getMyLikedRecipes);
 
 recipesRoute
-   .route('/:recipeId/like')
-   .get(protect, likeRecipe)
+   .route('/like')
+   .post(protect, likeRecipe)
 
 recipesRoute
-   .route('/:recipeId/dislike')
-   .get(protect, dislikeRecipe)
+   .route('/dislike')
+   .post(protect, dislikeRecipe)
+
+// recipesRoute
+//    .route('/:recipeId/dislike')
+//    .get(protect, dislikeRecipe)
 
 recipesRoute
    .route('/:slug')

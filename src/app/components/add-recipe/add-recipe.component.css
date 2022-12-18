@@ -44,8 +44,12 @@ select {
   color: var(--bs-gray-600);
 }
 
-option {
+select.valid {
   color: var(--text-color);
+}
+
+option {
+    color: var(--text-color);
 }
 
 .ingredients-container {

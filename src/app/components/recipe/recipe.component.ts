@@ -5,7 +5,7 @@ import { RecipeService } from 'src/app/services/recipe.service';
 import { User } from 'src/app/models/user.model';
 import { AuthService } from 'src/app/services/auth.service';
 import { ToastrService } from 'ngx-toastr';
-import { useMutationResult } from '@ngneat/query';
+import { QueryClientService, useMutationResult } from '@ngneat/query';
 import { Subject, takeUntil } from 'rxjs';
 
 @Component({
@@ -19,6 +19,7 @@ export class RecipeComponent implements OnInit, OnDestroy {
   private navigation = inject(BackNavigationService);
   private toast = inject(ToastrService);
   private router = inject(Router);
+  private queryClient = inject(QueryClientService);
 
   slug: string | null;
   dataFromServer: any;
@@ -29,6 +30,8 @@ export class RecipeComponent implements OnInit, OnDestroy {
   alreadyLiked: boolean;
   deleteRecipeMutation = useMutationResult();
   private ngUnsubscribe = new Subject<void>();
+  likeMutation = useMutationResult();
+  dislikeMutation = useMutationResult();
 
   constructor(private authService: AuthService) {
     this.authService.getUser().pipe(takeUntil(this.ngUnsubscribe)).subscribe((user) => (this.user = user));
@@ -77,29 +80,49 @@ export class RecipeComponent implements OnInit, OnDestroy {
   }
 
   likeRecipe(recipeId: string) {
-    this.recipeService.likeRecipe(recipeId).pipe(takeUntil(this.ngUnsubscribe)).subscribe({
-      next: () => {
-        this.alreadyLiked = true;
-        this.likes += 1;
-        this.toast.success('Recipe liked', 'Success');
+    this.recipeService.likeRecipe(recipeId).pipe(this.likeMutation.track(), takeUntil(this.ngUnsubscribe)).subscribe({
+      next: (newLike) => {
+        // this.router.navigate(['/recipes']);
+        this.toast.success(`Recipe liked`, `Success`);
       },
       error: (error) => {
-        this.toast.error(error.error.message, 'Error');
+        this.toast.error(error.message, 'Error');
       }
-    })
+    });
+    // this.recipeService.likeRecipe(recipeId).pipe(takeUntil(this.ngUnsubscribe)).subscribe({
+    //   next: () => {
+    //     // this.alreadyLiked = true;
+    //     // this.likes += 1;
+    //     // this.queryClient.invalidateQueries(['allRecipes', this.slug]);
+    //     this.toast.success('Recipe liked', 'Success');
+    //   },
+    //   error: (error) => {
+    //     this.toast.error(error.error.message, 'Error');
+    //   }
+    // })
   }
 
   dislikeRecipe(recipeId: string) {
-    this.recipeService.dislikeRecipe(recipeId).pipe(takeUntil(this.ngUnsubscribe)).subscribe({
-      next: () => {
-        this.alreadyLiked = false;
-        this.likes = this.likes == 0 ? 0 : this.likes - 1;
-        this.toast.success('Recipe disliked', 'Success');
+    this.recipeService.dislikeRecipe(recipeId).pipe(this.dislikeMutation.track(), takeUntil(this.ngUnsubscribe)).subscribe({
+      next: (newLike) => {
+        // this.router.navigate(['/recipes']);
+        this.toast.success(`Recipe disliked`, `Success`);
       },
       error: (error) => {
-        this.toast.error(error.error.message, 'Error');
+        this.toast.error(error.message, 'Error');
       }
-    })
+    });
+    // this.recipeService.dislikeRecipe(recipeId).pipe(takeUntil(this.ngUnsubscribe)).subscribe({
+    //   next: () => {
+    //     // this.alreadyLiked = false;
+    //     // this.likes = this.likes == 0 ? 0 : this.likes - 1;
+    //     // this.queryClient.invalidateQueries(['allRecipes', this.slug]);
+    //     this.toast.success('Recipe disliked', 'Success');
+    //   },
+    //   error: (error) => {
+    //     this.toast.error(error.error.message, 'Error');
+    //   }
+    // })
   }
 
   deleteRecipe(recipeId: string) {

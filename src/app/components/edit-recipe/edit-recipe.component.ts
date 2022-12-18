@@ -7,6 +7,7 @@ import { useMutationResult } from '@ngneat/query';
 import { Recipe } from 'src/app/models/recipe.model';
 import { BackNavigationService } from 'src/app/services/back-navigation.service';
 import { Subject, takeUntil } from 'rxjs';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-edit-recipe',
@@ -20,6 +21,7 @@ export class EditRecipeComponent implements OnInit, OnDestroy {
   private fb = inject(FormBuilder);
   private route = inject(ActivatedRoute);
   private navigation = inject(BackNavigationService);
+  private authService = inject(AuthService);
 
   slug: string | null;
   dataFromServer: any;
@@ -38,8 +40,13 @@ export class EditRecipeComponent implements OnInit, OnDestroy {
       this.recipeService.getRecipe(this.slug)?.result$.pipe(takeUntil(this.ngUnsubscribe)).subscribe((data) => {
         this.dataFromServer = { ...data };
         if(this.dataFromServer.isSuccess) {
-          this.recipe = {...this.dataFromServer.data.recipe};
-          this.createForm();
+          if(this.authService.getUserAsValue()?._id != this.dataFromServer.data.recipe.owner._id) {
+            this.router.navigate(['/']);
+            this.toast.error('Access denied', 'Error');
+          } else {
+            this.recipe = {...this.dataFromServer.data.recipe};
+            this.createForm();
+          }
         }
       });
     }
@@ -105,7 +112,7 @@ export class EditRecipeComponent implements OnInit, OnDestroy {
       const recipe = {...recipeData, ingredients: this.ingredients};
       this.recipeService.editRecipe(this.dataFromServer.data.recipe._id, recipe).pipe(this.editRecipeMutation.track()).pipe(takeUntil(this.ngUnsubscribe)).subscribe({
         next: (updatedRecipe) => {
-          this.router.navigate(['/recipes']);
+          this.router.navigate([`/recipes/details/${this.recipe.slug}`]);
           this.toast.success(`Recipe updated`, `Success`);
         },
         error: (error) => {

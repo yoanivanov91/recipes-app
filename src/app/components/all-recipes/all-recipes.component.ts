@@ -15,10 +15,11 @@ export class AllRecipesComponent implements OnInit, OnDestroy {
   
   private ngUnsubscribe = new Subject<void>();
   dataFromServer: any;
-  showRecipesSubject = new BehaviorSubject<any>([]);
+  showRecipesSubject = new BehaviorSubject<Recipe[]>([]);
   showRecipes$ = this.showRecipesSubject.asObservable();
   allRecipes: Recipe[];
-  show: String = 'recent';
+  show: string = 'recent';
+  query: string = '';
   
   ngOnInit(): void {
     this.recipeService.getAllRecipes().result$.pipe(takeUntil(this.ngUnsubscribe)).subscribe((recipeData) => {
@@ -37,6 +38,23 @@ export class AllRecipesComponent implements OnInit, OnDestroy {
       this.show = 'recent';
       this.showRecipesSubject.next(this.dataFromServer.data);
     }
+  }
+
+  handleChange(event: Event) {
+    this.showRecipes((event.target as HTMLInputElement).value);
+  }
+
+  getShownRecipes() {
+    return this.showRecipesSubject.getValue();
+  }
+
+  search() {
+    if(this.query.length < 3) {
+      this.showRecipes(this.show);
+      return;
+    }
+    let result = this.getShownRecipes().filter((recipe: Recipe) => recipe.title.toLocaleLowerCase().includes(this.query.toLocaleLowerCase()) || recipe.category.toLocaleLowerCase().includes(this.query.toLocaleLowerCase()));
+    this.showRecipesSubject.next(result);
   }
 
   ngOnDestroy(): void {

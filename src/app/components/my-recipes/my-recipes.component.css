@@ -22,7 +22,14 @@ table th {
 table tr {
     transition: background-color 0.15s ease-in-out;
 }
+
 table tr:hover {
     background-color: var(--bs-light);
-    cursor: pointer;
+}
+
+.search-input {
+    appearance: none;
+    border: none;
+    border-bottom: 1px solid var(--primary);
+    outline: 0;
 }

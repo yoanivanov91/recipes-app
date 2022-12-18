@@ -31,10 +31,10 @@
             <div *ngIf="user" class="buttons">
                 <!-- Like and Dislike -->
                 <ng-container *ngIf="user._id != dataFromServer.data.recipe.owner._id">
-                    <button *ngIf="!alreadyLiked" (click)="likeRecipe(dataFromServer.data.recipe._id)" class="z-index-up button-style-reset p-0" title="Like" role="button">
+                    <button *ngIf="!dataFromServer.data.recipe.alreadyLiked" (click)="likeRecipe(dataFromServer.data.recipe._id)" class="z-index-up button-style-reset p-0" title="Like" role="button">
                         <i class="bi bi-hand-thumbs-up icon-button-size icon-button-color"></i>
                     </button>
-                    <button *ngIf="alreadyLiked" (click)="dislikeRecipe(dataFromServer.data.recipe._id)" class="z-index-up button-style-reset p-0" title="Dislike" role="button">
+                    <button *ngIf="dataFromServer.data.recipe.alreadyLiked" (click)="dislikeRecipe(dataFromServer.data.recipe._id)" class="z-index-up button-style-reset p-0" title="Dislike" role="button">
                         <i class="bi bi-hand-thumbs-up-fill icon-button-size icon-button-color"></i>
                     </button>
                 </ng-container>
@@ -69,8 +69,8 @@
             <div class="d-flex align-items-center">
                 <i class="bi bi-hand-thumbs-up icon-button-size me-2"></i>
                 <span
-                >{{ likes }}
-                {{ likes == 1 ? " like" : " likes" }}</span
+                >{{ dataFromServer.data.recipe.likes }}
+                {{ dataFromServer.data.recipe.likes == 1 ? " like" : " likes" }}</span
                 >
             </div>
             </div>

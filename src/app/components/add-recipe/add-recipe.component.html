@@ -68,11 +68,12 @@
                 formControlName="category"
                 [ngClass]="{
                   'is-invalid': submitted && form.category.errors,
-                  'is-valid': submitted && !form.category.errors
+                  'is-valid': submitted && !form.category.errors,
+                  'valid': form.category.valid
                 }"
                 (change)="changeCategory($event)"
               >
-                <option hidden selected value="">Select a category</option>
+                <option disabled hidden selected value="">Select a category</option>
                 <option value="Appetizers">Appetizers</option>
                 <option value="Main-courses">Main-courses</option>
                 <option value="Side-dishes">Side-dishes</option>

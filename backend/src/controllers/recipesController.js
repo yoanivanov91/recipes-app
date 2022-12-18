@@ -12,7 +12,7 @@ const getRecentAndFavoriteAndLiked = asyncHandler(async (req, res) => {
     let popular = await Recipe.find({}).sort({likes: -1, createdAt: -1}).limit(10).lean();
     let liked = [];
     if(req.user) {
-        liked = await Like.find({userId: { $ne: req.user._id}}).sort({createdAt: -1}).limit(10).populate('recipeId').lean();
+        liked = await Like.find({}).sort({createdAt: -1}).limit(10).populate('recipeId').lean();
     }
     res.status(200).json({
         recent, 
@@ -30,31 +30,6 @@ const getMyRecipes = asyncHandler(async (req, res) => {
         liked
     });
 });
-
-// const getLastTenRecipes = asyncHandler(async (req, res) => {
-//     const recipes = await Recipe.find({}).sort({createdAt: -1}).limit(10);
-//     res.status(200).json(recipes);
-// });
-
-// const getTenMostPopularRecipes = asyncHandler(async (req, res) => {
-//     const recipes = await Recipe.find({}).sort({likes: -1, createdAt: -1}).limit(10);
-//     res.status(200).json(recipes);
-// });
-
-// const getMyLikedRecipes = asyncHandler(async (req, res) => {
-//     const recipes = await Like.find({userId: req.user._id}).sort({createdAt: -1}).limit(10).populate('recipeId');
-//     res.status(200).json(recipes);
-// });
-
-// const getTenMoreFromCategory = asyncHandler(async (req, res) => {
-//     const recipes = await Recipe.find({category: req.params.category, _id: { $ne: req.params.recipeId }}).sort({likes: -1, createdAt: -1}).limit(10);
-//     res.status(200).json(recipes);
-// });
-
-// const getTenMoreFromUser = asyncHandler(async (req, res) => {
-//     const recipes = await Recipe.find({owner: req.params.userId, _id: { $ne: req.params.recipeId }}).sort({likes: -1, createdAt: -1}).limit(10);
-//     res.status(200).json(recipes);
-// });
 
 const getRecipe = asyncHandler(async (req, res) => {
     let recipe = await Recipe.findOne({slug: req.params.slug}).populate('owner').lean();
@@ -139,11 +114,19 @@ const deleteRecipe = asyncHandler(async (req, res) => {
     }
 
     const deletedRecipe = await Recipe.findOneAndDelete({_id: req.params.recipeId});
+    await Like.deleteMany({recipeId: req.params.recipeId});
     res.status(200).json(deletedRecipe);
 });
 
 const likeRecipe = asyncHandler(async (req, res) => {
-    const alreadyLiked = await Like.findOne({userId: req.user._id, recipeId: req.params.recipeId});
+    const {recipeId} = req.body;
+
+    if(!recipeId) {
+        res.status(400);
+        throw new Error('Recipe ID is required');
+    }
+
+    const alreadyLiked = await Like.findOne({userId: req.user._id, recipeId});
     if(alreadyLiked) {
         res.status(401)
         throw new Error('You\'ve already liked this recipe')
@@ -151,10 +134,10 @@ const likeRecipe = asyncHandler(async (req, res) => {
 
     const like = await Like.create({
         userId: req.user._id,
-        recipeId: req.params.recipeId
+        recipeId
     });
 
-    const recipe = await Recipe.findOne({_id: req.params.recipeId});
+    const recipe = await Recipe.findOne({_id: recipeId});
     recipe.likes += 1;
     await recipe.save();
 
@@ -162,7 +145,14 @@ const likeRecipe = asyncHandler(async (req, res) => {
 });
 
 const dislikeRecipe = asyncHandler(async (req, res) => {
-    const like = await Like.findOne({userId: req.user._id, recipeId: req.params.recipeId});
+    const {recipeId} = req.body;
+
+    if(!recipeId) {
+        res.status(400);
+        throw new Error('Recipe ID is required');
+    }
+
+    const like = await Like.findOne({userId: req.user._id, recipeId});
     if(!like) {
         res.status(400);
         throw new Error('This recipe hasn\'t been liked yet');
@@ -170,7 +160,7 @@ const dislikeRecipe = asyncHandler(async (req, res) => {
 
     const deletedRecipe = await Like.findOneAndDelete({_id: like._id});
 
-    const recipe = await Recipe.findOne({_id: req.params.recipeId});
+    const recipe = await Recipe.findOne({_id: recipeId});
     recipe.likes = recipe.likes == 0 ? 0 : recipe.likes - 1;
     await recipe.save();
     
@@ -181,11 +171,6 @@ module.exports = {
     getAllRecipes,
     getMyRecipes,
     getRecentAndFavoriteAndLiked,
-    // getLastTenRecipes,
-    // getTenMostPopularRecipes,
-    // getMyLikedRecipes,
-    // getTenMoreFromCategory,
-    // getTenMoreFromUser,
     getRecipe,
     createRecipe,
     updateRecipe,

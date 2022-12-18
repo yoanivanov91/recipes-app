@@ -11,13 +11,24 @@
   <div>
     <div class="d-flex justify-content-between align-items-center mb-3">
       <h1 class="headline m-0">All recipes</h1>
-      <button class="simple-link fw-semibold dropdown-toggle button-style-reset p-0" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-        {{show === 'popular' ? 'Most popular' : 'Recently added'}}
-      </button>
-      <ul class="dropdown-menu dropdown-menu-end">
-        <li><button [ngClass]="{'active': show !== 'popular'}" class="dropdown-item button-style-reset" (click)="showRecipes('recent')">Recently added</button></li>
-        <li><button [ngClass]="{'active': show === 'popular'}" class="dropdown-item button-style-reset" (click)="showRecipes('popular')">Most popular</button></li>
-      </ul>
+      <div class="d-flex align-items-center gap-3">
+        <input
+            type="text"
+            class="form-control"
+            id="search"
+            placeholder="Search"
+            [(ngModel)]="query"
+            (keyup)="search()"
+        />
+        <select
+            id="filter"
+            class="form-select w-auto"
+            (change)="handleChange($event)"
+        >
+            <option value="recent" [selected]="this.show === 'recent'">Recent</option>
+            <option value="popular" [selected]="this.show === 'popular'">Popular</option>
+        </select>
+      </div>
     </div>
 
     <div

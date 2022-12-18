@@ -46,17 +46,23 @@ export class RecipeService {
   }
 
   public likeRecipe(recipeId: string) {
-    return this.http.get<Like>(
-      `${this.api_url}/recipes/${recipeId}/like`,
+    return this.http.post<Like>(
+      `${this.api_url}/recipes/like`,
+      {recipeId},
       this.options
-    );
+    ).pipe(tap(like => {
+      this.queryClient.invalidateQueries(['allRecipes']);
+    }));
   }
 
   public dislikeRecipe(recipeId: string) {
-    return this.http.get<Like>(
-      `${this.api_url}/recipes/${recipeId}/dislike`,
+    return this.http.post<Like>(
+      `${this.api_url}/recipes/dislike`,
+      {recipeId},
       this.options
-    );
+    ).pipe(tap(dislike => {
+      this.queryClient.invalidateQueries(['allRecipes']);
+    }));
   }
 
   public getRecipe(slug: string) {
@@ -74,8 +80,6 @@ export class RecipeService {
       recipe,
       this.options).pipe(tap(newRecipe => {
         this.queryClient.invalidateQueries(['allRecipes']);
-        this.queryClient.invalidateQueries(['myRecipes']);
-        this.queryClient.invalidateQueries(['recentAndPopularAndLikedRecipes']);
     }));
   }
 
@@ -85,8 +89,6 @@ export class RecipeService {
       recipe,
       this.options).pipe(tap(updatedRecipe => {
         this.queryClient.invalidateQueries(['allRecipes']);
-        this.queryClient.invalidateQueries(['myRecipes']);
-        this.queryClient.invalidateQueries(['recentAndPopularAndLikedRecipes']);
     }));
   }
 
@@ -96,7 +98,6 @@ export class RecipeService {
       this.options).pipe(tap(deletedRecipe => {
         this.queryClient.invalidateQueries(['allRecipes']);
         this.queryClient.invalidateQueries(['myRecipes']);
-        this.queryClient.invalidateQueries(['recentAndPopularAndLikedRecipes']);
     }));
   }
 }

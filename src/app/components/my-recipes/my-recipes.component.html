@@ -20,13 +20,24 @@
     <div>
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h1 class="headline m-0">My recipes</h1>
-            <button class="simple-link fw-semibold dropdown-toggle button-style-reset p-0" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                {{show === 'added' ? 'Added' : 'Liked'}}
-            </button>
-            <ul class="dropdown-menu dropdown-menu-end">
-                <li><button [ngClass]="{'active': show !== 'liked'}" class="dropdown-item button-style-reset" (click)="showRecipes('added')">Added</button></li>
-                <li><button [ngClass]="{'active': show === 'liked'}" class="dropdown-item button-style-reset" (click)="showRecipes('liked')">Liked</button></li>
-            </ul>
+            <div class="d-flex align-items-center gap-3">
+                <input
+                    type="text"
+                    class="form-control"
+                    id="search"
+                    placeholder="Search"
+                    [(ngModel)]="query"
+                    (keyup)="search()"
+                />
+                <select
+                    id="filter"
+                    class="form-select w-auto"
+                    (change)="handleChange($event)"
+                >
+                    <option value="added" [selected]="this.show === 'added'">Added</option>
+                    <option value="liked" [selected]="this.show === 'liked'">Liked</option>
+                </select>
+            </div>
         </div>
         <ng-container *ngIf="dataFromServer.isSuccess">
             <div class="table-responsive" *ngIf="recipes.length > 0">
@@ -45,7 +56,7 @@
                 </thead>
                 <tbody>
                     <ng-container *ngFor="let recipe of recipes">
-                        <tr routerLink="/recipes/details/{{recipe.slug}}" class="align-middle">
+                        <tr class="align-middle">
                             <td><img src="{{recipe.image}}" alt="{{recipe.title}}" class="recipe-img" /></td>
                             <td>{{recipe.title}}</td>
                             <td>{{recipe.category}}</td>
@@ -55,8 +66,11 @@
                             <td>{{recipe.description}}</td>
                             <td class="max-content">
                                 <div class="buttons">
+                                    <a routerLink="/recipes/details/{{recipe.slug}}" title="Go to recipe"><i class="bi bi-display icon-button-size icon-button-color"></i></a>
+                                    <ng-container *ngIf="user?._id == recipe.owner">
                                     <a routerLink="/recipes/edit/{{recipe.slug}}" title="Edit recipe"><i class="bi bi-pencil-square icon-button-size icon-button-color"></i></a>
-                                    <button class="button-style-reset p-0" role="button" title="Delete recipe"><i class="bi bi-trash-fill icon-button-size heart-button-color"></i></button>
+                                    <button (click)="selectForDelete(recipe)" class="button-style-reset p-0" role="button" title="Delete recipe" data-bs-toggle="modal" data-bs-target="#deleteModal"><i class="bi bi-trash-fill icon-button-size heart-button-color"></i></button>
+                                    </ng-container>
                                 </div>
                             </td>
                         </tr>
@@ -65,9 +79,28 @@
             </table>
             </div>
             <p class="m-0 no-elements" *ngIf="recipes.length == 0">
-                You haven't added any recipes yet.
+                You haven't {{show == 'added' ? 'added' : 'liked'}} any recipes yet.
             </p>
         </ng-container>
     </div>
 </div>
+</div>
+
+<!-- Delete Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h1 class="modal-title fs-5" id="deleteModalLabel">Deleting recipe</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            Are you sure you want to delete {{toBeDeleted.title}}?
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn my-secondary-btn" (click)="deleteRecipe(toBeDeleted._id)" data-bs-dismiss="modal">Delete</button>
+        </div>
+        </div>
+    </div>
 </div>
