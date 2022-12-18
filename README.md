@@ -1,5 +1,8 @@
+<img src="/app.png" alt="MyRecipes app" style="width: 100%"/>
+
 # MyRecipes
 A simple MEAN Stack application about sharing and viewing recipes.
+
 
 ## General information
 * This app is about sharing and viewing recipes.
@@ -19,6 +22,8 @@ A simple MEAN Stack application about sharing and viewing recipes.
     * jsonwebtoken
     * mongoose
     * nodemon
+* Database
+    * MongoDB
 ## Setup
 To run this project, in the project directory, you should run:
 
